@@ -34,9 +34,10 @@ public class VerifyTokenIntercepter implements HandlerInterceptor {
 	// 请求处理之前的操作
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		log.debug("--------进入拦截器--------");
 		// boolean result = obj instanceof Class -> 用来测试一个对象是否为一个类的实例
-		// 不是HandlerMethod类型的实例，返回true，请求继续
-		if (handler == null || !(handler instanceof HandlerMethod)) // 如果不是映射到方法直接通过       
+		// 不是HandlerMethod类型的实例，放行，这里只对Controller的方法（springMVC）进行拦截
+		if (handler == null || !(handler instanceof HandlerMethod))
 			return true;
 
 		Method method = ((HandlerMethod) handler).getMethod();

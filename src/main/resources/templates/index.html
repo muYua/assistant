@@ -101,7 +101,7 @@
 	<script src="js/crypto-js.js"></script>
 
 	<script type="text/javascript">
-		/* ajax */
+	
 		function ajax_login(idNumber, password, flag) {
 			$.ajax('./login', {
 				data: {
@@ -137,7 +137,6 @@
 				}
 			}); //end ajax
 		}//end ajax_login()
-		/* end ajax */
 		
 		/* 登录 */
 		function login() {	
@@ -196,6 +195,7 @@
 				return false;
 			}
 		}//end login()
+		
 		//回车触发登录事件login()
 		$("#idNumber")[0].onkeypress = function(){
 			if(isPressEnter())
@@ -207,6 +207,42 @@
 		}
 		
 		$("#submit")[0].onclick = function(){login();}
+		
+		function ajax_autoLogin(token) {
+			$.ajax('./autoLogin', {
+				data: {},
+				dataType: 'json',//服务器返回json格式数据
+				type: 'post',//HTTP请求类型
+				timeout: 10000,//超时时间设置为10秒
+				header:{
+			    	'Authorization': token
+			   	},
+			    beforeSend : function(request) {
+			    	request.setRequestHeader("Authorization", token);
+			    },
+				success: function(data){
+					if(data.success){
+						console.log("使用token自动登录成功！");
+// 						window.location.href = 'main.html';
+					}
+				},
+				error:function(xhr, type, errorThrown){
+					console.log(xhr+"--xhr");
+					console.log(type+"---type");
+					console.log(errorThrown+"----erroThown");
+				}
+			}); //end ajax
+		} //end ajax_autologin()
+		
+		//校验Tokon自动登录
+		$(function(){
+			let token = localStorage.getItem("token");
+			
+			if(!isEmpty(token)){
+				console.log(token);
+				ajax_autoLogin(token);
+			}
+		});
 		/* end 登录 */	
 		
 		/* 注册 */
@@ -220,6 +256,7 @@
 			window.location.href = 'forgotPassword.html';
 		}
 		/* end 忘记密码 */
+		
 	</script>
 </body>
 
