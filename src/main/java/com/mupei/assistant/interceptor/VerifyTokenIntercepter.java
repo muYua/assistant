@@ -62,7 +62,7 @@ public class VerifyTokenIntercepter implements HandlerInterceptor {
     		
     		final int TIME_MINUTES = 60*24*3; // 过期时限
     		
-    		if(encryptedToken == null) {
+    		if(encryptedToken == null || "".equals(encryptedToken)) {
     			log.debug("--token为空，没有权限访问--");
     			
     			// 没有权限
@@ -75,6 +75,11 @@ public class VerifyTokenIntercepter implements HandlerInterceptor {
     		
     		//Token解密
     		String token = encryptUtil.decryptWithAES(encryptedToken, encryptUtil.getKeyOfAES());
+    		
+    		if(token == null || "".equals(token)) {
+    			log.debug("--Token令牌AES解密失败，没有权限访问--");
+    			return false;
+    		}
     		
     		log.debug("Token完成解密[ {} ]", token);
     		

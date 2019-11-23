@@ -154,7 +154,6 @@ public class RoleController {
 	public Json autoLogin(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 		// 如果Token校验成功--拦截器完成
 		Json json = new Json();
-		json.setSuccess(true);
 
 		// 获取登入时间
 		simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai")); // 设置北京时区
@@ -169,6 +168,13 @@ public class RoleController {
 
 		loginRole.setLastLogInTime(lastLogInTime);
 		loginRole.setIp(ipAddr);
+		
+		// 更新持久化数据
+		if(roleService.autoLogin(loginRole)) {
+			json.setSuccess(true);
+		}else {
+			json.setSuccess(false);
+		}
 
 		log.debug("用户[ {} ]---登录成功！", loginRole.getEmail());
 		log.debug("登入时间--- [ {} ]", lastLogInTime);
@@ -213,7 +219,7 @@ public class RoleController {
 
 				json.setSuccess(true);
 			} else {
-				log.debug("用户[ {} ]---注册失败！", role.getEmail());
+				log.debug("用户[ {} ]---注册失败,邮箱可能已被注册！", role.getEmail());
 
 				json.setSuccess(false);
 			}

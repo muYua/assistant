@@ -8,4 +8,6 @@ public interface RoleService {
 	
 	public Boolean reg(Role role);
 
+	public Boolean autoLogin(Role loginRole);
+
 }

@@ -208,6 +208,7 @@
 		
 		$("#submit")[0].onclick = function(){login();}
 		
+		//校验Tokon自动登录
 		function ajax_autoLogin(token) {
 			$.ajax('./autoLogin', {
 				data: {},
@@ -224,6 +225,8 @@
 					if(data.success){
 						console.log("使用token自动登录成功！");
 // 						window.location.href = 'main.html';
+					} else {
+						console.log("使用token自动登录失败！");
 					}
 				},
 				error:function(xhr, type, errorThrown){
@@ -234,7 +237,6 @@
 			}); //end ajax
 		} //end ajax_autologin()
 		
-		//校验Tokon自动登录
 		$(function(){
 			let token = localStorage.getItem("token");
 			

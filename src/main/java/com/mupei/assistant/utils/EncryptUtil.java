@@ -138,6 +138,10 @@ public class EncryptUtil {
 	public String decryptWithAES(String message, String key) {
 		final String ALGORITHM = "AES/CBC/PKCS5Padding";
 
+		if(message == null || "".equals(message)) {
+			return null;
+		}
+		
 		if (key == null || "".equals(key)) {
 			return null;
 		}

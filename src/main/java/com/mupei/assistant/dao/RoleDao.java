@@ -20,4 +20,6 @@ public interface RoleDao extends CrudRepository<Role, Integer> {
 	@Query("FROM Role r WHERE r.phoneNumber = :idNumber AND r.password = :password")
 	public Role findByPhoneNumberAndPassword(@Param("idNumber") String idNumber, @Param("password") String password);
 
+	public Role findByEmail(String email);
+
 }
