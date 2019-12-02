@@ -145,13 +145,13 @@ input[name='verifyCode'] {
 	<script type="text/javascript" src="js/zxcvbn.js"></script>
 	<script src="js/crypto-js.js"></script>
 	<script type="text/javascript">
-		layui.use([ 'form', 'layer' ], function() {
-				var form = layui.form, layer = layui.layer;
-	
-				//监听提交(如果监听的submit按钮，仍会同步通过form表单提交)
-				form.on('submit(reg)', function(data){
-					reg();
-				});
+		layui.use('form', function() {
+			var form = layui.form;
+
+			//监听提交(如果监听的submit按钮，仍会同步通过form表单提交)
+			form.on('submit(reg)', function(data){
+				reg();
+			});
 		});
 		
 		function ajax_reg(nickname, email, password, type) {

@@ -43,17 +43,17 @@ public class RoleController {
 	// @Resource，按名字注入Bean组件：RedisTemplate<String, Object>，
 	// @Atuowired，按类型只能注入RedisTemplate、RedisTemplate<String,String>或StringRedisTemplate
 	@Autowired
-	StringRedisTemplate stringRedisTemplate;
+	private StringRedisTemplate stringRedisTemplate;
 	@Autowired
-	EmailUtil emailUtil;
+	private EmailUtil emailUtil;
 	@Autowired
-	IpAddressUtil ipAddressUtil;
+	private IpAddressUtil ipAddressUtil;
 	@Autowired
-	EncryptUtil encryptUtil;
+	private EncryptUtil encryptUtil;
 	@Autowired
-	JWTUtil jwtUtil;
+	private JWTUtil jwtUtil;
 	@Autowired
-	JsonUtil jsonUtil;
+	private JsonUtil jsonUtil;
 
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 

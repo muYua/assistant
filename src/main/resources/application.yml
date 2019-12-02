@@ -23,14 +23,18 @@ spring:  datasource: #数据库基本配置    type: com.alibaba.druid.pool.Dr
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   jpa:    show-sql: true #启用SQL语句的日志记录    
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect #设置方言
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect #设置方言
+    database-platform: com.mupei.assistant.config.MySQLConfig #设置方言
     hibernate:      ddl-auto: update #自动生成数据表的方式    properties:      hibernate:
-        format_sql: true #格式化SQL语句
+        format_sql: true #格式化SQL语句   
+#        dialect:
+#          storage_engine: innodb
   mvc:    date-format: yyyy-MM-dd HH:mm:ss #mvc接收参数时对日期进行格式化 
   jackson:    date-format: yyyy-MM-dd HH:mm:ss #jackson对响应回去的日期参数进行格式化
     time-zone: GMT+8
   thymeleaf:    cache: true
   devtools:    restart:      enabled: true #热部署devtools开启
+      exclude: src/main/resources #排除监听该目录
       additional-paths:      - src/main/java #监听目录
   resources: #资源文件访问路径    static-locations:    - /META-INF/resources/
     - classpath:/resources/

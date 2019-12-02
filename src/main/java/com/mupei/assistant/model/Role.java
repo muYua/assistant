@@ -49,9 +49,9 @@ public class Role {
 	// 性别
 	@Column(name = "role_sex")
 	private String sex;
-	// 年龄
-	@Column(name = "role_age")
-	private String age;
+	// 出生日期
+	@Column(name = "role_birthday")
+	private String birthday;
 	// QQ
 	@Column(name = "role_qq")
 	private String qq;

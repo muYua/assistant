@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class JsonUtil {
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
 	// 将对象转换为JSON字符串
 	public String stringify(Object val) throws JsonProcessingException {

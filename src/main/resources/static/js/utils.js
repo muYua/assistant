@@ -24,6 +24,12 @@ function isEmpty (obj) {
     }
 }
 
+//判断日期是否格式化输入
+function isFormatDate (str) {
+	var format = /^(1|2)9[\d]{2}-(0\d|1[0-2])-([012]\d|3[01])$/;
+	return format.test(str);
+}
+
 //判断手机号合法性
 function isPhoneNumber (str) {
 	var phone = /^1[3-9]\d{9}$/;
@@ -65,18 +71,18 @@ function encryptWithAES (message, key, vi) {
 	var encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(message), CryptoJS.enc.Utf8.parse(key), { //key必须要为16位十六进制进制
 		iv: CryptoJS.enc.Utf8.parse(vi), // 初始向量
 		mode: CryptoJS.mode.CBC,
-		padding: CryptoJS.pad.Pkcs7 
+		padding: CryptoJS.pad.Pkcs7
 	});
 	return CryptoJS.enc.Base64.stringify(encrypted.ciphertext); //将密文转换为Base64编码字符串
 }
 
 //AES解密
 function decryptWithAES (encrypted_Base64, key, vi) {
-	
+
 	let encrypted = CryptoJS.enc.Base64.parse(encrypted_Base64); //Base64字符串解码
 	let src = CryptoJS.enc.Base64.stringify(encrypted);
-	
-    var decrypted = CryptoJS.AES.decrypt(src, CryptoJS.enc.Utf8.parse(key), { 
+
+    var decrypted = CryptoJS.AES.decrypt(src, CryptoJS.enc.Utf8.parse(key), {
     	iv: CryptoJS.enc.Utf8.parse(vi), // 初始向量
     	mode: CryptoJS.mode.CBC,
     	padding: CryptoJS.pad.Pkcs7
