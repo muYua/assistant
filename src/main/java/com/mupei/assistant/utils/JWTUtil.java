@@ -46,7 +46,7 @@ public class JWTUtil {
 //		}
 //	}
 //----- 以下是通过利用Spring容器完成对Bean组件作用域（生命周期）的管理-----//
-	// 宕机会丢失key，因为不在是原来的class类
+	// 宕机会丢失key，因为不再是原来的class类
 	// static变量是属于该类的静态变量，只要使用类是单例模式[@Scope("singleton")]且未被销毁过，static变量值不变
 	private static RsaJsonWebKey rsaJsonWebKey = null;
 

@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "Role")
 @Table(name = "tb_role")
 @Inheritance(strategy = InheritanceType.JOINED) // 继承映射，连接子类的映射策略
 public class Role {

@@ -16,4 +16,8 @@ public interface BackstageService<T> {
 
 	public T getEntityById(Integer id, Class<T> clazz);
 
+	public Long getCount(Class<T> clazz);
+
+	public ArrayList<T> findByPage(Integer pageNo, Integer pageSize, Class<T> clazz);
+
 }

@@ -19,6 +19,6 @@ public class Json {
 	//Layui数据接口
 	private Integer code; //接口状态
 	private String msg; //提示文本
-	private Integer count; //数据长度
+	private Long count; //数据长度
 	private ArrayList<?> data; //数据列表
 }

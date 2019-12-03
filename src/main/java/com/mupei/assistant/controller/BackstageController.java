@@ -22,12 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mupei.assistant.annotation.NoVerifyToken;
 import com.mupei.assistant.model.Role;
 import com.mupei.assistant.service.BackstageService;
-import com.mupei.assistant.service.RoleService;
 import com.mupei.assistant.utils.EncryptUtil;
 import com.mupei.assistant.utils.IpAddressUtil;
 import com.mupei.assistant.utils.JsonUtil;
@@ -70,11 +67,52 @@ public class BackstageController<T> {
 			break;
 		}
 		
-		ArrayList<T> list = backstageService.getAll(clazz);
-		json.setCount(list.size());
+		ArrayList<T> list = backstageService.getAll(clazz);	
+		
+		json.setCount((long) list.size());
 		json.setData(list);
 		json.setCode(0);
-		json.setMsg("获取数据成功！");	
+		json.setMsg("获取数据成功！");			
+		json.setSuccess(true);
+		
+		return json;
+	}
+	
+	/**
+	 * @description 分页查询
+	 * @param pageNo 当前页码数
+	 * @param pageSize 每页显示数据条数
+	 * @param entity POJO名
+	 * @param clazz POJO类型
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@NoVerifyToken
+	@GetMapping("/get{entity}sByPage")
+	public Json getEntitiesByPage(@RequestParam("page") Integer pageNo, @RequestParam("limit") Integer pageSize, @PathVariable("entity") String entity, Class<T> clazz) {
+		Json json = new Json();
+		
+		switch (entity) {
+		case "Role":
+			clazz = (Class<T>) Role.class;
+			break;
+
+		default:
+			break;
+		}
+		
+		//数据总条数
+		Long pageTotal =backstageService.getCount(clazz);
+		
+		//数据分页查询起始序号
+//		Long startNo = (long) ((pageNo-1)*pageSize);
+
+		ArrayList<T> list = backstageService.findByPage(pageNo, pageSize, clazz);
+		
+		json.setCount(pageTotal);
+		json.setData(list);
+		json.setCode(0); //0为成功代号（Layui）
+		json.setMsg("获取分页数据成功！");	
 		json.setSuccess(true);
 		
 		return json;
