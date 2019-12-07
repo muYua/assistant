@@ -19,5 +19,9 @@ public interface BackstageService<T> {
 	public Long getCount(Class<T> clazz);
 
 	public ArrayList<T> findByPage(Integer pageNo, Integer pageSize, Class<T> clazz);
+	
+	public Long countByKeywordLike(String keyword, String value, Class<T> clazz);
+
+	public ArrayList<T> findByKeywordLike(Integer pageNo, Integer pageSize, String keyword, String value, Class<T> clazz);
 
 }

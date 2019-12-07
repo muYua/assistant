@@ -3,6 +3,7 @@ package com.mupei.assistant.dao;
 import java.util.ArrayList;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -29,10 +30,28 @@ public interface RoleDao extends CrudRepository<Role, Integer> {
 
 	public Role findByEmail(String email);
 
-/* 分页查询 */	
+	/* 分页查询 */	
 //	@Query(value = "SELECT r.* FROM tb_role r LIMIT :startNo,:pageSize", nativeQuery = true)
 //	public ArrayList<Object[]> findByPage(@Param("startNo") Long startNo, @Param("pageSize") Integer pageSize);
-
 	@Query("FROM #{#entityName}")
 	public ArrayList<Role> findByPage(Pageable pageable);
+
+	/* 关键词模糊查询 */
+	//-->like %value%
+//	public ArrayList<Role> findByEmailContaining(String value);
+	//-->like value，value可以是包含%_的字符串
+	public ArrayList<Role> findByEmailLike(String value, Pageable pageable);
+	public ArrayList<Role> findByPhoneNumberLike(String value, Pageable pageable);
+	public ArrayList<Role> findByQqLike(String value, Pageable pageable);
+	public ArrayList<Role> findByNicknameLike(String value, Pageable pageable);
+	public ArrayList<Role> findByNameLike(String value, Pageable pageable);
+	public ArrayList<Role> findByType(Integer value, Pageable pageable);
+	//总数计数
+	public Long countByEmailContaining(String value, Sort sort);
+	public Long countByPhoneNumberContaining(String value, Sort sort);
+	public Long countByQqContaining(String value, Sort sort);
+	public Long countByNicknameContaining(String value, Sort sort);
+	public Long countByNameContaining(String value, Sort sort);
+	public Long countByType(Integer value, Sort sort);
+	
 }

@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<title>layout 后台大布局 - Layui</title>
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="format-detection" content="telephone=no">
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>layout 后台大布局 - Layui</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
 
-	<link rel="stylesheet" href="layui/css/layui.css" media="all">
+<link rel="stylesheet" href="layui/css/layui.css" media="all">
+
+<style type="text/css">
+input[name="search"] {
+	height: 26px;
+}
+
+.layui-form-select>.layui-select-title>.layui-input {
+	width: 100px;
+	height: 26px;
+	margin-left: 5px;
+}
+
+.layui-form-select dl {
+	top: 28px;
+}
+
+.layui-table-page {
+	position: fixed;
+}
+</style>
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div class="layui-header">
 			<div class="layui-logo">
-				<a href="http://127.0.0.1:8080/assistant/backstage.html">
-					<img src="images/head-portraits/admin.jpg" alt="layui" style="width:150px;height:40px;">
+				<a href="http://127.0.0.1:8080/assistant/backstage.html"> <img
+					src="images/head-portraits/admin.jpg" alt="layui"
+					style="width: 150px; height: 40px;">
 				</a>
 			</div>
 			<!-- 头部区域（可配合layui已有的水平导航） -->
@@ -43,8 +66,8 @@
 			</ul>
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item">
-					<a href="javascript:;"><img src="images/head-portraits/admin.jpg" class="layui-nav-img">
-						天外
+					<a href="javascript:;">
+						<img src="images/head-portraits/admin.jpg" class="layui-nav-img">天外 
 					</a>
 					<dl class="layui-nav-child">
 						<dd>
@@ -63,7 +86,8 @@
 			<div class="layui-side-scroll">
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
-					<li class="layui-nav-item layui-nav-itemed"><a class="" href="javascript:;">所有角色</a>
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;">所有角色</a>
 						<dl class="layui-nav-child">
 							<dd>
 								<a href="javascript:;" class="layui-this">账号信息</a>
@@ -100,27 +124,51 @@
 
 		<div class="layui-body">
 			<!-- 内容主体区域 -->
+			<!-- 面包屑 -->
 			<div style="padding: 15px;">
-				Role账号数据表 <br> <br>
-				<!-- Role表单 -->
-				<table class="layui-hide" id="roleForm" lay-filter="roleForm"></table>
-				<script type="text/html" id="toolbar">
-					<div class="layui-inline" title="新添数据" lay-event="add">
-						<i class="layui-icon layui-icon-add-1" color: #xe61f;"></i>
-					</div>
-					<div class="layui-inline" title="删除数据" lay-event="delete">
-						<i class="layui-icon layui-icon-delete" color: #xe640;"></i>
-					</div>
-					<div class="layui-inline" title="获取选中数目" lay-event="getCheckLength">
-						<i class="layui-icon layui-icon-tips" color: #xe702;"></i>
-					</div>
-				</script>
-				<script type="text/html" id="bar">
-					<a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="update">编辑</a>
-					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-				</script>
-
+				<span class="layui-breadcrumb"> <a href="/">用户信息</a> <a
+					href="/demo/">所有角色</a> <a><cite>账号信息</cite></a>
+				</span>
 			</div>
+
+			<!-- 搜索功能 -->
+			<div class="search">
+				<div class="layui-form layui-inline">
+					<select name="search">
+						<option value="email">电子邮箱</option>
+						<option value="phoneNumber">手机号码</option>
+						<option value="qq">QQ</option>
+						<option value="nickname">昵称</option>
+						<option value="name">姓名</option>
+						<option value="type">用户类型</option>
+					</select>
+				</div>
+				<div class="layui-inline">
+					<input type="text" name="search" placeholder="请输入搜索内容"
+						class="layui-input" />
+				</div>
+			</div>
+
+			<!-- Role表单 -->
+			<table class="layui-hide" id="roleForm" lay-filter="roleForm"></table>
+			<script type="text/html" id="toolbar">
+				<div class="layui-inline" title="新添数据" lay-event="add">
+					<i class="layui-icon layui-icon-add-1" style="color: #xe640;"></i>
+				</div>
+				<div class="layui-inline" title="删除数据" lay-event="delete">
+					<i class="layui-icon layui-icon-delete" style="color: #xe640;"></i>
+				</div>
+				<div class="layui-inline" title="获取选中数目" lay-event="getCheckLength">
+					<i class="layui-icon layui-icon-tips" style="color: #xe640;"></i>
+				</div>
+				<div class="layui-inline" title="刷新表单" lay-event="flush">
+					<i class="layui-icon layui-icon-refresh-3" style="color: #555;"></i>
+				</div>
+			</script>
+			<script type="text/html" id="bar">
+				<a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="update">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			</script>
 		</div>
 
 		<div class="layui-footer">
@@ -129,8 +177,8 @@
 		</div>
 	</div>
 	<script src="layui/layui.js" charset="utf-8"></script>
+	<script src="js/utils.js"></script>
 	<script>
-		//JavaScript代码区域
 		layui.use(['table','element'], function() {
 			var table = layui.table;
 			var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
@@ -147,8 +195,8 @@
 				,title: 'Role账号数据表'
 			 	//,page: true //开启分页
 			 	,page: { //开启分页
-			 	    curr: 1 //重新从第 1 页开始
-			 	  }
+			 		curr: 1 //重新从第 1 页开始
+			 	 }
 			 	,limit: 10
 			 	,limits: [10,20,30,50,100]
 				,cols: [[ //表头
@@ -171,6 +219,31 @@
 			      	,{fixed: 'right', title:'操作', toolbar: '#bar', width:112}
 			    ]]
 			});//end 数据表格
+
+			//监听搜索事件
+			$("input[name='search']").on("keyup", function(){
+				//按下回车执行
+				if(isPressEnter()){
+					console.log("enter")
+					const SEARCH_DOM = $(this)
+					,SELECT_DOM = $("select[name='search']")
+					,searchCValue = SEARCH_DOM.val()
+					,select = SELECT_DOM.val();
+
+					//重载数据表格
+					table.reload('roleFormId', {
+						url:'http://127.0.0.1:8080/assistant/admin/getRolesByKeyword'
+						,method: 'get'
+						,where: {
+							keyword: select,
+							value: searchCValue
+						}//设定异步数据接口的额外参数，任意设
+					  	,page: {
+							curr: 1 //获取起始页，重新从第 1 页开始
+					  	}
+					});//end table.reload
+				}//end if
+			});//end 监听搜索事件
 
 			//头工具栏事件
 			table.on('toolbar(roleForm)', function(obj) { //toolbar(lay-filter)
@@ -244,16 +317,22 @@
 						var data = checkStatus.data;
 						layer.msg('选中了：' + data.length + ' 个');
 						break;
-
-				};
+					case 'flush':
+						table.reload('roleFormId', {
+							url: 'http://127.0.0.1:8080/assistant/admin/getRolesByPage'
+							,page: {
+						  		curr: 1 //获取起始页，重新从第 1 页开始
+						  	}
+						}); //end table.reload
+						break;
+				};//end switch(obj.event)
 			});//end 头工具栏事件
 
 			//监听行点击事件
 			table.on('row(roleForm)', function (obj) {
-		      	//标注选中行样式
-		      	obj.tr.addClass("layui-table-click").siblings().removeClass("layui-table-click");
-
-   			});
+				//标注选中行样式
+				obj.tr.addClass("layui-table-click").siblings().removeClass("layui-table-click");
+			});//end 监听行点击事件
 
 			//监听行工具事件
 			table.on('tool(roleForm)', function(obj) {
@@ -274,13 +353,13 @@
 									//重载数据表格
 									table.reload('roleFormId', {
 										where: {}//设定异步数据接口的额外参数，任意设
-									  	,page: {
+										,page: {
 									    	curr: 1 //获取起始页，重新从第 1 页开始
 									  	}
 									}); //end table.reload
 
 									layer.close(index);
-								}
+								}//end if
 							},
 							error:function(xhr, type, errorThrown){
 								console.log(xhr);
@@ -307,12 +386,12 @@
    	  					move: false,  //禁止拖拽
 						title: "编辑数据",
    	  					content: 'updateRoleForm.html'
-				 	});
+				 	});//end layer.open
 
 				}// end if (obj.event === 'update')
 			});//end 监听行工具事件
 
-		});
+		});//end layui.use
 	</script>
 </body>
 </html>

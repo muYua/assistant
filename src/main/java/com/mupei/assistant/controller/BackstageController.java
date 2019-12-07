@@ -84,12 +84,13 @@ public class BackstageController<T> {
 	 * @param pageSize 每页显示数据条数
 	 * @param entity POJO名
 	 * @param clazz POJO类型
-	 * @return
+	 * @return VO（键值对）对象，由前端页面自动转为JSON数据
 	 */
 	@SuppressWarnings("unchecked")
 	@NoVerifyToken
 	@GetMapping("/get{entity}sByPage")
-	public Json getEntitiesByPage(@RequestParam("page") Integer pageNo, @RequestParam("limit") Integer pageSize, @PathVariable("entity") String entity, Class<T> clazz) {
+	public Json getEntitiesByPage(@RequestParam("page") Integer pageNo, @RequestParam("limit") Integer pageSize,
+			@PathVariable("entity") String entity, Class<T> clazz) {
 		Json json = new Json();
 		
 		switch (entity) {
@@ -113,6 +114,45 @@ public class BackstageController<T> {
 		json.setData(list);
 		json.setCode(0); //0为成功代号（Layui）
 		json.setMsg("获取分页数据成功！");	
+		json.setSuccess(true);
+		
+		return json;
+	}
+	
+	/**
+	 * @description 关键词的模糊查询
+	 * @param pageNo 当前页码数，用于分页
+	 * @param pageSize 每页显示数据条数,用于分页
+	 * @param keyword 查询关键词
+	 * @param value 查询的内容
+	 * @param entity POJO名
+	 * @param clazz POJO类型
+	 * @return VO对象
+	 */
+	@SuppressWarnings("unchecked")
+	@NoVerifyToken
+	@GetMapping("/get{entity}sByKeyword")
+	public Json getEntitiesByKeyword(@RequestParam("page") Integer pageNo, @RequestParam("limit") Integer pageSize,
+			@RequestParam("keyword") String keyword, @RequestParam("value") String value,
+			@PathVariable("entity") String entity, Class<T> clazz) {
+		Json json = new Json();
+
+		switch (entity) {
+		case "Role":
+			clazz = (Class<T>) Role.class;
+			break;
+
+		default:
+			break;
+		}
+		
+		ArrayList<T> list = backstageService.findByKeywordLike(pageNo, pageSize, keyword, value, clazz);
+		Long count = backstageService.countByKeywordLike(keyword, value,clazz);
+		
+		json.setCount(count);
+		json.setData(list);
+		json.setCode(0);
+		json.setMsg("查询数据成功！");			
 		json.setSuccess(true);
 		
 		return json;
@@ -173,7 +213,8 @@ public class BackstageController<T> {
 	@SuppressWarnings("unchecked")
 	@NoVerifyToken
 	@PostMapping("/add{entity}")
-	public Json addEntity(@RequestBody T t, @PathVariable("entity") String entity, Class<T> clazz, HttpServletRequest request) throws NoSuchAlgorithmException, IOException {
+	public Json addEntity(@RequestBody T t, @PathVariable("entity") String entity, Class<T> clazz,
+			HttpServletRequest request) throws NoSuchAlgorithmException, IOException {
 		Json json = new Json();
 		
 		if(t == null) {
@@ -231,7 +272,8 @@ public class BackstageController<T> {
 	@SuppressWarnings("unchecked")
 	@NoVerifyToken
 	@PutMapping("/update{entity}")
-	public Json updateEntity(@RequestBody T t, @PathVariable("entity") String entity, Class<T> clazz, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
+	public Json updateEntity(@RequestBody T t, @PathVariable("entity") String entity, Class<T> clazz,
+			HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
 		Json json = new Json();
 		
 		if(t == null) {
