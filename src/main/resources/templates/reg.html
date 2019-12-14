@@ -1,365 +1,140 @@
 <!DOCTYPE HTML>
 <html lang="utf-8">
 <head>
-<title>Assistant</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="UTF-8" />
-<meta name="keywords" content="" />
-
-<link rel="stylesheet" type="text/css" href="layui/css/layui.css" media="all">
-
-<script src="js/iconfont.js"></script>
-
+    <title>Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content=""/>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css" media="all">
 </head>
 <style type="text/css">
-/* 页面背景 */
-body {
-	background: #2196F3;
-	color: white;
-	padding: 0 200px;
-	position: fixed;
-}
-#bg {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-}
-#bg canvas {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
+    /* 页面背景 */
+    body {
+        background: #2196F3;
+        color: white;
+        padding: 0 200px;
+        position: fixed;
+    }
 
-form {
-	width: 600px;
-    background: rgba(10, 10, 10, 0.17);
-    padding: 28px 40px 5px 0;
-    display: -webkit-flex;
-    display: block;
-    border-radius: 10px 10px 10px 10px;
-}
+    #bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
 
-/* 小图标 */
-.icon {
-    width: 25px;
-    height: 25px;
-    vertical-align: middle;
-    fill: currentColor;
-    overflow: hidden;
-    text-align: center;
-    color: #555;
-    top: 239px;
-    left: 767px;
-    position: absolute;
-    z-index: 1;
-}
+    #bg canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
-.icon :hover {
-	cursor: pointer;
-}
+    form {
+        width: 600px;
+        background: rgba(10, 10, 10, 0.17);
+        padding: 28px 40px 5px 0;
+        display: -webkit-flex;
+        display: block;
+        border-radius: 10px 10px 10px 10px;
+    }
 
-/* 输入框 */
-.layui-input {
-    padding-right: 35px;
-}
+    /* 小图标 */
+    .icon {
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
+        fill: currentColor;
+        overflow: hidden;
+        text-align: center;
+        color: #555;
+        top: 239px;
+        left: 767px;
+        position: absolute;
+        z-index: 1;
+    }
 
-input[name='verifyCode'] {
-	width: 106px;
-	padding-right: 10px;
-}
+    .icon :hover {
+        cursor: pointer;
+    }
+
+    /* 输入框 */
+    .layui-input {
+        padding-right: 35px;
+    }
+
+    input[name='verifyCode'] {
+        width: 106px;
+        padding-right: 10px;
+    }
 
 </style>
 <body>
-	<div id="bg">
-		<canvas></canvas>
-		<canvas></canvas>
-		<canvas></canvas>
-	</div>
-	<!-- context -->
-    <!-- 将表单内的相关元素分组，会在相关表单元素周围绘制边框。 -->
-	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-		<legend>注册</legend>
-	</fieldset>
+<div id="bg">
+    <canvas></canvas>
+    <canvas></canvas>
+    <canvas></canvas>
+</div>
+<!-- context -->
+<!-- 将表单内的相关元素分组，会在相关表单元素周围绘制边框。 -->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>注册</legend>
+</fieldset>
 
-	<form class="layui-form" action="">
-		<div class="layui-form-item">
-			<label class="layui-form-label">昵称</label>
-			<div class="layui-input-block">
-				<input type="text" name="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">电子邮箱</label>
-			<div class="layui-input-block">
-				<input type="text" name="email" autocomplete="off" placeholder="可用于登录和密码找回" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">密码</label>
-			<div class="layui-input-block">
-				<input type="password" name="password" autocomplete="off" placeholder="请输入6~16位的密码"  class="layui-input">
-			</div>
-		</div>
-		<svg class="icon" aria-hidden="true">
-  			<use xlink:href="#iconyanjing" id="yanjing"></use>
-		</svg>
-		<div class="layui-form-item">
-			<label class="layui-form-label">角色</label>
-			<div class="layui-input-block">
-				<input type="radio" name="type" value="1" title="我是老师">
-				<input type="radio" name="type" value="2" title="我是学生" checked="checked">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">验证码</label>
-			<div class="layui-input-block">
-				<input type="text" name="verifyCode" autocomplete="off" placeholder="请输入验证码" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<div class="layui-input-block">
-				<button type="button" class="layui-btn" lay-submit lay-filter="reg">立即注册</button>
-			</div>
-		</div>
-	</form>
-	<!-- //context -->
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-block">
+            <input type="text" name="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电子邮箱</label>
+        <div class="layui-input-block">
+            <input type="text" name="email" autocomplete="off" placeholder="可用于登录和密码找回" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" autocomplete="off" placeholder="请输入6~16位的密码" class="layui-input">
+        </div>
+    </div>
+    <svg class="icon" aria-hidden="true">
+        <use xlink:href="#iconyanjing" id="yanjing"></use>
+    </svg>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block">
+            <input type="radio" name="type" value="1" title="我是老师">
+            <input type="radio" name="type" value="2" title="我是学生" checked="checked">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">验证码</label>
+        <div class="layui-input-block">
+            <input type="text" name="verifyCode" autocomplete="off" placeholder="请输入验证码" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" lay-submit lay-filter="reg">立即注册</button>
+        </div>
+    </div>
+</form>
+<!-- //context -->
 
-	<!-- copyright -->
-	<div class="footer">
-		<p>
-			Copyright &copy; 2019.一切解释权归作者所有.
-		</p>
-	</div>
-	<!-- //copyright -->
-
-	<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-	<!-- 背景 应该在引入jQuery之后 -->
-	<script type="text/javascript" src="js/canva_moving_effect.js"></script>
-	<script type="text/javascript" src="layui/layui.all.js" charset="utf-8"></script>
-	<script type="text/javascript" src="js/utils.js"></script>
-	<script type="text/javascript" src="js/zxcvbn.js"></script>
-	<script src="js/crypto-js.js"></script>
-	<script type="text/javascript">
-		layui.use('form', function() {
-			var form = layui.form;
-
-			//监听提交(如果监听的submit按钮，仍会同步通过form表单提交)
-			form.on('submit(reg)', function(data){
-				reg();
-			});
-		});
-		
-		function ajax_reg(nickname, email, password, type) {
-			$.ajax('./reg', {
-				data : {
-					nickname : nickname,
-					email : email,
-					password : encryptWithHashing (password, "MD5"),
-					type : type
-				},
-				dataType : 'json',//服务器返回json格式数据
-				type : 'post',//HTTP请求类型
-				timeout : 10000,//超时时间设置为10秒
-				success : function(data){
-					if (data.success) {
-						layer.msg('注册成功！', {
-					    	time: 2000 //2秒关闭（如果不配置，默认是3秒）
-						}, function(){
-							//弹窗结束后
-							//跳转登录页面
-							window.location.href = 'index.html';
-						}); 
-					} else {
-						layer.msg('注册失败，邮箱可能已被注册！', {
-							time: 2000
-						});
-					}
-				},
-				error : function(xhr, type, errorThrown){
-					console.log(xhr);
-					console.log(type);
-					console.log(errorThrown);
-				}
-			}); //end ajax
-		}//end ajax_reg()
-	
-		/* 注册 */
-		function reg() {
-			const NICKNAME_DOM = $("input[name='nickname']");
-			const EMAIL_DOM = $("input[name='email']");
-			const PASSWORD_DOM = $("input[name='password']");
-			const TYPE_DOM = $('input[type="radio"]:checked');
-			const VERIFY_CODE_DOM = $("input[name='verifyCode']");
-			
-			var nickname = NICKNAME_DOM.val().trim();
-			var email = EMAIL_DOM.val().trim();
-			var password = PASSWORD_DOM.val().trim();
-			var type = TYPE_DOM.val();
-			var verifyCode = $.trim(VERIFY_CODE_DOM.val());
-			
-			if (isEmpty(nickname)) {
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('昵称不能为空！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				NICKNAME_DOM.focus();
-				return false;
-			}
-			
-			if (isEmpty(email)) {
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('电子邮箱不能为空！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				EMAIL_DOM.focus();
-				return false;
-			}
-			
-			//电子邮箱数据验证
-			if (!isEmail(email)) {
-				//电子邮件
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('请填写正确的电子邮箱！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				EMAIL_DOM.val("");
-				EMAIL_DOM.focus();
-				return false;
-			}
-			
-			if (isEmpty(password)) {
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('密码不能为空！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				PASSWORD_DOM.focus();
-				return false;
-			}
-			
-			//密码数据验证
-			if (!isPassword(password)) {
-				//密码
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('密码必须6到12位，且不能出现空格！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				PASSWORD_DOM.val("");
-				PASSWORD_DOM.focus();
-				return false;
-			}
-			
-			if (isEmpty(verifyCode)) {
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('未填验证码！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				VERIFY_CODE_DOM.focus();
-				return false;
-			}
-				
-			/* email */
-	// 			$.ajax({
-	// 				url : "./getVerifyCode?email=" + email,
-	// 				type : "get",
-	// 				success : function(text) {
-	// 					if (text != null && text != "") {
-							
-	// 					} else {
-	// 						alert("获取失败，请重新获取")
-	// 					}
-	// 				}
-	// 			}); 
-			/* email end */
-			ajax_reg(nickname, email, password, type);
-		}//reg() end
-			
-		//回车触发登录事件login()
-		$("input[name='password']")[0].onkeypress = function() {
-			if(isPressEnter())
-				reg();
-		}
-		$("input[name='verifyCode']").on("keyup", function() {
-			//keypress--按键按下未松
-			//keyup--按键松开（按下按键结束）			
-			const VERIFY_CODE_DOM = $(this);
-			const verifyCode = $(this).val();
-			let len = verifyCode.length;
-			
-			if(len > 6){
-				layui.use('layer', function() {
-					var layer = layui.layer;
-					layer.msg('验证码格式错误！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭
-					});
-				});
-				VERIFY_CODE_DOM.val("");
-				VERIFY_CODE_DOM.focus();
-			}
-			if (isPressEnter())
-				reg();
-		});
-		/* end 注册 */
-	
-		/* 密码强弱提示 */
-		$("input[name='password']").on("keyup", function(){
-			//let是块级作用域，函数内部使用let定义后，对函数外部无影响。
-		  	//const定义的变量不可以修改，而且必须初始化。
-	    	//密码长度
-		  	let len = this.value.length;
-		  	//密码强弱估算得分
-		  	var score = zxcvbn(this.value).score;
-	
-		  	if (len === 0) {//空密码
-		  		$(this).css('background', 'rgb(255, 255, 255)');
-		  	}else if (len > 0 && score <= 1) {//弱密码
-		  		$(this).css('background', 'rgb(255, 75, 71)');
-		  	}else if (score === 2) {//中密码
-		  		$(this).css('background', 'rgb(249, 174, 53)');
-		  	}else {//强密码
-		  		$(this).css('background', 'rgb(45, 175, 125)');
-		  	}
-		
-	  	});
-		/* 密码强弱提示 end */
-		
-		/* 密码明文校验功能 */
-		$("#yanjing").on("mousedown", function(){
-			$("input[name='password']").prop('type','text');
-		});
-		$("#yanjing").on("mouseup", function(){
-			$("input[name='password']").prop('type','password');
-		});
-		/* 密码明文校验功能 end */
-		
-		/* 验证码校验 */
-		/* 验证码校验 end */
-		
-	</script>
-
+<!-- copyright -->
+<div class="footer">
+    <p>
+        Copyright &copy; 2019.一切解释权归作者所有.
+    </p>
+</div>
+<!-- //copyright -->
+<script type="text/javascript" data-main="js/reg" src="js/lib/require.js" charset="utf-8"></script>
 </body>
 
 </html>

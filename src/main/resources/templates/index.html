@@ -1,265 +1,86 @@
 <!DOCTYPE HTML>
 <html lang="utf-8">
 <head>
-	<title>Assistant</title>
-	<!-- Meta tag Keywords -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="UTF-8" />
-	<meta name="keywords" content=""/>
-	<!-- Style-CSS -->
-	<link rel="stylesheet" href="css/index.css" type="text/css" media="all" />
-	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
-	<script>
-		addEventListener("load", function () {
-			setTimeout(hideURLbar, 0);
-		}, false);
-
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
-	</script>
-	<!-- icon图标-symbol -->
-	<script src="./js/iconfont.js"></script>
+    <title>Assistant</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content=""/>
+    <!-- Style-CSS -->
+    <link rel="stylesheet" href="css/index.css" type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
 </head>
 
 <body>
-	<!-- bg effect -->
-	<div id="bg">
-		<canvas></canvas>
-		<canvas></canvas>
-		<canvas></canvas>
-	</div>
-	<!-- //bg effect -->
-	<!-- title -->
-	<h1>阿师课堂小助手</h1>
-	<!-- //title -->
-	<!-- content -->
-	<div class="sub-main-w3">
-		<form action="" method="get">
-			<h2>Login Now</h2>
-			<div class="form-style-agile">
-				<label>
-					<svg class="icon" aria-hidden="true">
-  						<use xlink:href="#iconlogin"></use>
-					</svg>
-					账号
-				</label>
-				<!-- required不适用于JS提交的表单，适用于form表单的submit -->
-				<input placeholder="请输入手机号或电子邮箱"  id="idNumber" type="text">
-			</div>
-			<div class="form-style-agile">
-				<label>
-					<svg class="icon" aria-hidden="true">
-  						<use xlink:href="#iconpswd"></use>
-					</svg>
-					密码
-				</label>
-				<input placeholder="请输入登录密码" id="password" type="password">
-			</div>
-			<!-- checkbox -->
-			<div class="wthree-text">
-				<ul>
-					<!-- <li>
-						<label class="anim">
-							<input type="checkbox" class="checkbox">
-							<span>记住密码</span>
-						</label>
-					</li> -->
-					<li>
-						<a href="javascript:;" id="forgotPassword">忘记密码？</a>
-					</li>
-					<li>
-						<a href="javascript:;" id="reg">注册</a>
-					</li>
-				</ul>
-			</div>
-			<!-- //checkbox -->
-			<input type="button" id="submit" value="Log In"><br>
-			<!-- <div class="wthree-text">
-				<ul>
-					<li>
-						<a href="javascript:;" id="reg">注册</a>
-					</li>
-				</ul>
-			</div> -->
-		</form>
-	</div>
-	<!-- //content -->
+<!-- bg effect -->
+<div id="bg">
+    <canvas></canvas>
+    <canvas></canvas>
+    <canvas></canvas>
+</div>
+<!-- //bg effect -->
+<!-- title -->
+<h1>阿师课堂小助手</h1>
+<!-- //title -->
+<!-- content -->
+<div class="sub-main-w3">
+    <form action="" method="get">
+        <h2>Login Now</h2>
+        <div class="form-style-agile">
+            <label>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconlogin"></use>
+                </svg>
+                账号
+            </label>
+            <!-- required不适用于JS提交的表单，适用于form表单的submit -->
+            <input placeholder="请输入手机号或电子邮箱" id="idNumber" type="text">
+        </div>
+        <div class="form-style-agile">
+            <label>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#iconpswd"></use>
+                </svg>
+                密码
+            </label>
+            <input placeholder="请输入登录密码" id="password" type="password">
+        </div>
+        <!-- checkbox -->
+        <div class="wthree-text">
+            <ul>
+                <!-- <li>
+                    <label class="anim">
+                        <input type="checkbox" class="checkbox">
+                        <span>记住密码</span>
+                    </label>
+                </li> -->
+                <li>
+                    <a href="javascript:;" id="forgotPassword">忘记密码？</a>
+                </li>
+                <li>
+                    <a href="javascript:;" id="reg">注册</a>
+                </li>
+            </ul>
+        </div>
+        <!-- //checkbox -->
+        <input type="button" id="submit" value="Log In"><br>
+        <!-- <div class="wthree-text">
+            <ul>
+                <li>
+                    <a href="javascript:;" id="reg">注册</a>
+                </li>
+            </ul>
+        </div> -->
+    </form>
+</div>
+<!-- //content -->
 
-	<!-- copyright -->
-	<div class="footer">
-		<p>Copyright &copy; 2019.一切解释权归作者所有.<a target="_blank" href="#">关于作者</a></p>
-	</div>
-	<!-- //copyright -->
-
-	
-	<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-	<!-- 背景 应该在引入jQuery之后 -->
-	<script type="text/javascript" src="js/canva_moving_effect.js"></script>
-	<script type="text/javascript" src="layui/layui.all.js"></script>
-	<script type="text/javascript" src="js/utils.js"></script>
-	<script src="js/crypto-js.js"></script>
-
-	<script type="text/javascript">
-	
-		function ajax_login(idNumber, password, flag) {
-			$.ajax('./login', {
-				data: {
-					idNumber: idNumber,
-					password: encryptWithHashing(password, "MD5"),
-					flag: flag
-				},
-				dataType: 'json',//服务器返回json格式数据
-				type: 'get',//HTTP请求类型
-				timeout: 10000,//超时时间设置为10秒
-				success: function(data){
-					if(data.success){
-						//将token存入本地
-						localStorage.setItem("token",encryptWithAES(data.obj.token, data.obj.key, data.obj.vi));
-						console.log(encryptWithAES(data.obj.token, data.obj.key, data.obj.vi));
-						//跳转主页
-// 						window.location.href = 'main.html';
-					}	
-					else{
-						layui.use('layer', function(){
-							var layer = layui.layer;
-							layer.msg('用户名或密码错误！', {
-								anim: 6, //抖动
-						    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-							});
-						}); 
-					} 
-				},
-				error:function(xhr, type, errorThrown){
-					console.log(xhr+"--xhr");
-					console.log(type+"---type");
-					console.log(errorThrown+"----erroThown");
-				}
-			}); //end ajax
-		}//end ajax_login()
-		
-		/* 登录 */
-		function login() {	
-			var flag = 0;//默认是电子邮箱
-			
-			const ID_NUMBER_DOM = $("#idNumber");
-			const PASSWORD_DOM = $("#password");
-			
-			var idNumber = ID_NUMBER_DOM.val().trim();
-			var password = PASSWORD_DOM.val().trim();
-			
-			if (isEmpty(idNumber)) {
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('电子邮箱或手机号码不能为空！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				ID_NUMBER_DOM.focus();
-				return false;//结束JS
-			}
-			
-			if (isEmpty(password)) {
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('密码不能为空！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				PASSWORD_DOM.focus();
-				return false;
-			}
-			//判断登录账号类型
-			if (isEmail(idNumber)) {
-				//电子邮件
-				flag = 0;
-				ajax_login(idNumber, password, flag);
-			}
-			else if (isPhoneNumber(idNumber)) {
-				//电话号码
-				flag = 1;
-				ajax_login(idNumber, password, flag);
-			}
-			else{
-				layui.use('layer', function(){
-					var layer = layui.layer;
-					layer.msg('请填写正确的电子邮箱或手机号码！', {
-						anim: 6, //抖动
-				    	time: 1000 //1秒关闭（如果不配置，默认是3秒）
-					});
-				});
-				ID_NUMBER_DOM.val("");
-				ID_NUMBER_DOM.focus();
-				return false;
-			}
-		}//end login()
-		
-		//回车触发登录事件login()
-		$("#idNumber")[0].onkeypress = function(){
-			if(isPressEnter())
-				login();
-		}
-		$("#password")[0].onkeypress = function(){
-			if(isPressEnter())
-				login();
-		}
-		
-		$("#submit")[0].onclick = function(){login();}
-		
-		//校验Tokon自动登录
-		function ajax_autoLogin(token) {
-			$.ajax('./autoLogin', {
-				data: {},
-				dataType: 'json',//服务器返回json格式数据
-				type: 'post',//HTTP请求类型
-				timeout: 10000,//超时时间设置为10秒
-				header:{
-			    	'Authorization': token
-			   	},
-			    beforeSend : function(request) {
-			    	request.setRequestHeader("Authorization", token);
-			    },
-				success: function(data){
-					if(data.success){
-						console.log("使用token自动登录成功！");
-// 						window.location.href = 'main.html';
-					} else {
-						console.log("使用token自动登录失败！");
-					}
-				},
-				error:function(xhr, type, errorThrown){
-					console.log(xhr+"--xhr");
-					console.log(type+"---type");
-					console.log(errorThrown+"----erroThown");
-				}
-			}); //end ajax
-		} //end ajax_autologin()
-		
-		$(function(){
-			let token = localStorage.getItem("token");
-			
-			if(!isEmpty(token)){
-				console.log(token);
-				ajax_autoLogin(token);
-			}
-		});
-		/* end 登录 */	
-		
-		/* 注册 */
-		$("#reg")[0].onclick = function reg(){
-			window.location.href = 'reg.html';
-		}
-		/* end 注册 */
-		
-		/* 忘记密码 */
-		$("#forgotPassword")[0].onclick = function forgotPassword(){
-			window.location.href = 'forgotPassword.html';
-		}
-		/* end 忘记密码 */
-		
-	</script>
+<!-- copyright -->
+<div class="footer">
+    <p>Copyright &copy; 2019.一切解释权归作者所有.<a target="_blank" href="#">关于作者</a></p>
+</div>
+<!-- //copyright -->
+<script type="text/javascript" data-main="js/index" src="js/lib/require.js" charset="utf-8"></script>
 </body>
 
 </html>

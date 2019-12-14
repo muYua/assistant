@@ -1,3 +1,14 @@
+//对滚动缓存功能进行设置
+//页面加载的时候添加一个定时器，0秒之后执行hideURLbar函数。hideURLbar函数将页面滚动至坐标（0,1）。
+addEventListener("load", function () {
+	setTimeout(hideURLbar, 0);
+}, false);
+
+function hideURLbar() {
+	window.scrollTo(0, 1);
+}
+
+//具体背景效果实现
 (function($){
 	var canvas = $('#bg').children('canvas'),
 		background = canvas[0],
