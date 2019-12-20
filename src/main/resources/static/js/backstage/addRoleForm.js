@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: 'js',
+    baseUrl: '../js',
     paths: {
         iconfont: 'utils/iconfont',
         utils: 'utils/utils',

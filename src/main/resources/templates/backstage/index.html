@@ -14,32 +14,40 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
 
-    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
 
     <style type="text/css">
         input[name="search"] {
             height: 26px;
         }
 
+        /* select组件 */
         .layui-form-select > .layui-select-title > .layui-input {
             width: 100px;
             height: 26px;
             margin-left: 5px;
         }
-
         .layui-form-select dl {
             top: 28px;
         }
 
+        /* 面包屑 */
+        #breadcrumb{
+           padding: 15px;
+        }
+
+        #logo{
+            width: 150px;
+            height: 40px;
+        }
     </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">
-            <a href="http://127.0.0.1:8080/assistant/backstage.html"> <img
-                    src="images/head-portraits/admin.jpg" alt="layui"
-                    style="width: 150px; height: 40px;">
+            <a href="http://127.0.0.1:8080/assistant/backstage.html">
+                <img id="logo" src="../images/head-portraits/admin.jpg" alt="logo">
             </a>
         </div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
@@ -64,7 +72,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img src="images/head-portraits/admin.jpg" class="layui-nav-img">天外
+                    <img src="../images/head-portraits/admin.jpg" class="layui-nav-img">天外
                 </a>
                 <dl class="layui-nav-child">
                     <dd>
@@ -84,23 +92,20 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
                 <li class="layui-nav-item layui-nav-itemed">
-					<a class="" href="javascript:;">所有角色</a>
+					<a href="javascript:;">账号信息</a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" class="layui-this">账号信息</a>
+                            <a id="roleInfo" href="javascript:;" class="layui-this">账号管理</a>
                         </dd>
                         <dd>
-                            <a href="javascript:;">教师</a>
+                            <a id="roleActivate" href="javascript:;">激活管理</a>
                         </dd>
                         <dd>
-                            <a href="javascript:;">学生</a>
-                        </dd>
-                        <dd>
-                            <a href="">系统管理员</a>
+                            <a id="roleHeadPortraits" href="javascript:;">头像管理</a>
                         </dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="javascript:;">待开发。。</a>
+                <li class="layui-nav-item"><a href="javascript:;">教师信息</a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;">列表一</a>
@@ -113,26 +118,28 @@
                         </dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">待开发。。</a></li>
-                <li class="layui-nav-item"><a href="">待开发。。</a></li>
+                <li class="layui-nav-item"><a href="">学生信息</a></li>
+                <li class="layui-nav-item"><a href="">管理员信息</a></li>
             </ul>
         </div>
     </div>
 
-    <div class="layui-body">
+    <div id="contentBody" class="layui-body">
         <!-- 内容主体区域 -->
         <!-- 面包屑 -->
-        <div style="padding: 15px;">
-				<span class="layui-breadcrumb"> <a href="/">用户信息</a> <a
-                        href="/demo/">所有角色</a> <a><cite>账号信息</cite></a>
-				</span>
+        <div id="breadcrumb">
+            <span class="layui-breadcrumb">
+                <a href="#">用户信息</a>
+                <a href="#">账号信息</a>
+                <a><cite>账号管理</cite></a>
+            </span>
         </div>
 
         <!-- 搜索功能 -->
         <div class="search">
             <div class="layui-form layui-inline">
                 <label>
-                    <select name="search">
+                    <select id="searchSelect" name="search">
                         <option value="email">电子邮箱</option>
                         <option value="phoneNumber">手机号码</option>
                         <option value="qq">QQ</option>
@@ -150,8 +157,8 @@
         </div>
 
         <!-- Role表单 -->
-        <table class="layui-hide" id="roleForm" lay-filter="roleForm"></table>
-        <script type="text/html" id="toolbar">
+        <table class="layui-hide" id="roleInfoForm" lay-filter="roleInfoForm"></table>
+        <script type="text/html" id="roleInfoFormToolbar">
             <div class="layui-inline" title="新添数据" lay-event="add">
                 <i class="layui-icon layui-icon-add-1" style="color: #555;"></i>
             </div>
@@ -165,7 +172,7 @@
                 <i class="layui-icon layui-icon-refresh-3" style="color: #555;"></i>
             </div>
         </script>
-        <script type="text/html" id="bar">
+        <script type="text/html" id="roleInfoFormRowBar">
             <a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="update">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
@@ -176,6 +183,6 @@
         © assistant.com - 底部固定区域
     </div>
 </div>
-<script type="text/javascript" data-main="js/backstage" src="js/lib/require.js" charset="utf-8"></script>
+<script type="text/javascript" data-main="../js/backstage/index" src="../js/lib/require.js" charset="utf-8"></script>
 </body>
 </html>

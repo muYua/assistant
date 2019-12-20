@@ -3,6 +3,7 @@ package com.mupei.assistant.utils;
 import java.io.File;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
@@ -24,13 +25,13 @@ public class EmailUtil {
 	private String from;
 
 	/**
-	 * @description 发送普通邮箱
-	 * @author MUYUA
+	 * 发送普通邮箱
+	 *
 	 * @param to      收件地址
 	 * @param title   邮件标题
 	 * @param content 邮件内容
+	 * @author MUYUA
 	 */
-
 	public void sendSimpleMail(String to, String title, String content) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		// 发送人地址
@@ -40,18 +41,18 @@ public class EmailUtil {
 		message.setText(content);
 
 		mailSender.send(message);
-
-		log.debug("邮件成功发送到[ " + to + " ]");
+//		log.debug("【EmailUtil】邮件成功发送到>>{}", to);
 	}
 
 	/**
-	 * @description 发送附件邮箱
+	 * 发送附件邮箱
+	 *
 	 * @param to       收件地址
 	 * @param title    邮件标题
-	 * @param cotent   邮件内容
+	 * @param content  邮件内容
 	 * @param fileList 附件
 	 */
-	public void sendAttachmentsMail(String to, String title, String cotent, List<File> fileList) {
+	public void sendAttachmentsMail(String to, String title, String content, List<File> fileList) {
 		MimeMessage message = mailSender.createMimeMessage();
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -59,7 +60,7 @@ public class EmailUtil {
 			helper.setFrom(from);
 			helper.setTo(to);
 			helper.setSubject(title);
-			helper.setText(cotent);
+			helper.setText(content);
 
 			String fileName = null;
 			for (File file : fileList) {
@@ -71,8 +72,31 @@ public class EmailUtil {
 		}
 
 		mailSender.send(message);
+//		log.debug("【EmailUtil】附件邮件成功发送到>>{}", to);
+	}
 
-		log.debug("附件邮件成功发送到[ " + to + " ]");
+	/**
+	 * 发送HTML邮箱
+	 *
+	 * @param to          收件地址
+	 * @param title       邮件标题
+	 * @param htmlContent 邮件内容
+	 */
+	public void sendHtmlMail(String to, String title, String htmlContent) {
+		MimeMessage message = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+			helper.setFrom(from);
+			helper.setTo(to);
+			helper.setSubject(title);
+			helper.setText(htmlContent, true);
+
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+
+		mailSender.send(message);
 	}
 
 }

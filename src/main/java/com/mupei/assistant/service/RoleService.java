@@ -8,6 +8,18 @@ public interface RoleService {
 	
 	public Boolean reg(Role role);
 
-	public Boolean autoLogin(Role loginRole);
+	//激活账号
+	public Boolean activateEmail(String email);
 
+	public Boolean resetPassword(String email, String password);
+
+    public Boolean deleteRoleByEmail(String email);
+
+	public Boolean isExistByEmail(String email);
+
+	public Role findByEmail(String email);
+
+    public Role findById(Integer id);
+
+	public Boolean logout(Integer id, String time);
 }

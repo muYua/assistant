@@ -29,7 +29,7 @@ public class Role {
 	@Column(name = "role_id")
 	private Integer id;
 	// 手机号码（登录）
-	@Column(name = "role_phoneNumber")
+	@Column(name = "role_phone_number")
 	private String phoneNumber;
 	// 电子邮箱（登录+密码找回）
 	@Column(name = "role_email", nullable = false)
@@ -59,16 +59,19 @@ public class Role {
 	@Column(name = "role_type", nullable = false)
 	private Integer type;
 	// 注册时间
-	@Column(name = "role_regTime", nullable = false)
+	@Column(name = "role_reg_time", nullable = false)
 	private String regTime;// yyyy-MM-dd HH:mm:ss
 	// 最近一次登入时间
-	@Column(name = "role_lastLogInTime")
+	@Column(name = "role_last_log_in_time")
 	private String lastLogInTime;
 	// 最近一次登出时间
-	@Column(name = "role_lastLogOutTime")
+	@Column(name = "role_last_log_out_time")
 	private String lastLogOutTime;
 	// 最近一次登录IP或注册时IP
 	@Column(name = "role_ip")
 	private String ip;
+	//激活
+	@Column(name = "role_activated", nullable = false)
+	private Integer activated;
 
 }

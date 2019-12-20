@@ -18,10 +18,11 @@ import org.springframework.stereotype.Component;
 public class EncryptUtil {
 
 	/**
-	 * @description 散列算法加密
-	 * @param message 明文
-	 * @param hash    散列加密算法类型：SHA-1、SHA-256、MD5等
-	 * @return String 密文
+	 * 散列算法加密
+	 *
+	 * @param message   明文
+	 * @param algorithm 散列加密算法类型：MD2、MD5、SHA(SHA-1)、SHA-1、SHA-224、SHA-256、SHA-384、SHA-512等（不区分大小写）
+	 * @return String:密文
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnsupportedEncodingException
 	 */
@@ -88,19 +89,24 @@ public class EncryptUtil {
 	// AES的初始向量，可以通过手动更改VI控制Token的有效性
 	private final String VI = "ABCDEF1221FEDCBA";
 
+	//对激活链接加密的VI
+	private final String VI_A = "AADDEF8956FEDCFA";
+
 	// 向外提供获取VI的接口
 	public String getVI() {
 		return this.VI;
 	}
 
+	public String getVI_A() { return  this.VI_A; }
 	/**
-	 * @description AES加密
+	 * AES加密
+	 *
 	 * @param message 待加密信息
 	 * @param key     密钥
-	 * @return String Base64编码字符串形式的密文
+	 * @return String:Base64编码字符串形式的密文
 	 */
 
-	public String encryptWithAES(String message, String key) {
+	public String encryptWithAES(String message, String key , String vi) {
 		final String ALGORITHM = "AES/CBC/PKCS5Padding";
 
 		if (key == null || "".equals(key)) {
@@ -116,7 +122,7 @@ public class EncryptUtil {
 
 			// 初始化AES密码器
 			Cipher cipher = Cipher.getInstance(ALGORITHM); // 根据指定算法ALGORITHM自成密码器
-			cipher.init(Cipher.ENCRYPT_MODE, skey, new IvParameterSpec(VI.getBytes())); // 初始化密码器，第一个参数为加密(ENCRYPT_MODE)或者解密(DECRYPT_MODE)操作，第二个参数为生成的AES密钥
+			cipher.init(Cipher.ENCRYPT_MODE, skey, new IvParameterSpec(vi.getBytes())); // 初始化密码器，第一个参数为加密(ENCRYPT_MODE)或者解密(DECRYPT_MODE)操作，第二个参数为生成的AES密钥
 
 			// 加密
 			byte[] byteMessage = message.getBytes("utf-8"); // 获取加密内容的字节数组(设置为utf-8)不然内容中如果有中文和英文混合中文就会解密为乱码
@@ -130,12 +136,13 @@ public class EncryptUtil {
 	}
 
 	/**
-	 * @description AES解密
+	 * AES解密
+	 *
 	 * @param message Base64编码字符串的密文
 	 * @param key     密钥
-	 * @return String 明文
+	 * @return String:明文
 	 */
-	public String decryptWithAES(String message, String key) {
+	public String decryptWithAES(String message, String key, String vi) {
 		final String ALGORITHM = "AES/CBC/PKCS5Padding";
 
 		if(message == null || "".equals(message)) {
@@ -155,7 +162,7 @@ public class EncryptUtil {
 
 			// 初始化AES密码器
 			Cipher cipher = Cipher.getInstance(ALGORITHM); // 根据指定算法ALGORITHM自成密码器
-			cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(VI.getBytes())); // 初始化密码器，第一个参数为加密(ENCRYPT_MODE)或者解密(DECRYPT_MODE)操作，第二个参数为生成的AES密钥
+			cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(vi.getBytes())); // 初始化密码器，第一个参数为加密(ENCRYPT_MODE)或者解密(DECRYPT_MODE)操作，第二个参数为生成的AES密钥
 
 			// 解密
 			byte[] encodeMessage = Base64.getDecoder().decode(message); // 把密文Base64编码字符串转回密文字节数组

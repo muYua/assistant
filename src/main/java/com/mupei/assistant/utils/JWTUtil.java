@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTUtil {
 	/**
-	 * @description RsaJsonWebKeyBuilder 单例生成密钥对
+	 * RsaJsonWebKeyBuilder 单例生成密钥对
+	 *
 	 * @ 单例模式：在整个Spring IoC容器中，只生成一个实例，每次请求都将获得相同的实例
 	 * @ 采用单例模式获取rsaJsonWebKey,调用该方法时总是获取相同的密钥对
 	 */
@@ -70,7 +71,8 @@ public class JWTUtil {
 	}
 
 	/**
-	 * @description 生成JWT令牌
+	 * 生成JWT令牌
+	 *
 	 * @param iss         签发方
 	 * @param aud         接收方
 	 * @param sub         主题(类似用户的session ID，用户的email)
@@ -114,12 +116,13 @@ public class JWTUtil {
 	}
 
 	/**
-	 * @description 解析校验令牌
+	 * 解析校验令牌
+	 *
 	 * @param jwt        JWT令牌序列
 	 * @param iss        发布JWT的人
 	 * @param aud        JWT的目标用户
 	 * @param maxMinutes 最大未来有效时间（分钟）
-	 * @return JwtClaims JWT核心内容
+	 * @return JwtClaims:JWT核心内容
 	 */
 	public JwtClaims parseToken(String jwt, String iss, String aud, int maxMinutes) {
 

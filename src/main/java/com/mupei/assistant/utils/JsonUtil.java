@@ -1,14 +1,11 @@
 package com.mupei.assistant.utils;
 
-import java.io.IOException;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 @Component
 public class JsonUtil {
@@ -22,7 +19,7 @@ public class JsonUtil {
 	}
 
 	// 将JSON字符串转换为对象
-	public <T> T parse(String json, Class<T> valueType) throws JsonParseException, JsonMappingException, IOException {
+	public <T> T parse(String json, Class<T> valueType) throws IOException {
 
 		return objectMapper.readValue(json, valueType);
 	}

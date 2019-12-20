@@ -29,12 +29,12 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
         });
     }
 
+    const ID_NUMBER_DOM = $("#idNumber")
+        , PASSWORD_DOM = $("#password");
+
     /* 登录 */
     function login() {
         let flag = 0;//默认是电子邮箱
-
-        const ID_NUMBER_DOM = $("#idNumber")
-            , PASSWORD_DOM = $("#password");
 
         let idNumber = ID_NUMBER_DOM.val().trim()
             , password = PASSWORD_DOM.val().trim();
@@ -59,7 +59,7 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
                     flag: flag
                 },
                 dataType: 'json',//服务器返回json格式数据
-                type: 'get',//HTTP请求类型
+                type: 'post',//HTTP请求类型
                 timeout: 10000,//超时时间设置为10秒
                 success: function (data) {
                     // console.log(data);
@@ -67,11 +67,20 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
                     if (data.success) {
                         //将token存入本地
                         localStorage.setItem("token", encrypt.encryptWithAES(obj.token, obj.key, obj.vi));
-                        console.log(encrypt.encryptWithAES(obj.token, obj.key, obj.vi));
+                        localStorage.setItem("type", encrypt.encryptWithAES(obj.type, obj.key, obj.vi));
+                        localStorage.setItem("id", encrypt.encryptWithAES(obj.id, obj.key, obj.vi));
                         //跳转主页
-                        // window.location.href = 'student.html';
+                        if(obj.type === 0)
+                            window.location.href = 'backstage/index.html';
+                        if(obj.type === 1)
+                            window.location.href = 'teacher.html';
+                        if(obj.type === 2)
+                            window.location.href = 'student.html';
                     } else {
-                        layerAnim6('用户名或密码错误！');
+                        if(!utils.isEmpty(data.msg)) //账号激活判断
+                            layerAnim6(data.msg);
+                        else
+                            layerAnim6('用户名或密码错误！');
                     }
                 },
                 error: function (xhr, type, errorThrown) {
@@ -100,11 +109,11 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
     }//end login()
 
     //回车触发登录事件login()
-    $("#idNumber")[0].onkeypress = function () {
+    ID_NUMBER_DOM[0].onkeypress = function () {
         if (utils.isPressEnter())
             login();
     };
-    $("#password").on('keypress', function () {
+    PASSWORD_DOM.on('keypress', function () {
         if (utils.isPressEnter())
             login();
     });
@@ -116,9 +125,8 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
     //Token令牌自登录
     $(function () {
         let token = localStorage.getItem("token");
-
+        console.log("【token】"+token);
         if (!utils.isEmpty(token)) {
-            console.log(token);
             $.ajax('./autoLogin', {
                 dataType: 'json',//服务器返回json格式数据
                 type: 'post',//HTTP请求类型
@@ -131,7 +139,18 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
                 },
                 success: function (data) {
                     if (data.success) {
-                        // window.location.href = 'student.html';
+                        let encryptedType = localStorage.getItem("type");
+                        let obj = data.obj;
+                        if(utils.isEmpty(encryptedType))
+                            return false;
+                        let type = encrypt.decryptWithAES(encryptedType, obj.key, obj.vi);
+                        //跳转主页
+                        if(type == 0)
+                            window.location.href = 'backstage/index.html';
+                        if(type == 1)
+                            window.location.href = 'teacher.html';
+                        if(type == 2)
+                            window.location.href = 'student.html';
                     } else {
                         console.log("使用token自动登录失败！");
                     }
@@ -140,6 +159,8 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
                     console.log(xhr);
                     console.log(type);
                     console.log(errorThrown);
+                    console.log("使用token自动登录失败！");
+                    return false;
                 }
             }); //end ajax
         }

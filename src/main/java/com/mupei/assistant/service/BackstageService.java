@@ -24,4 +24,5 @@ public interface BackstageService<T> {
 
 	public ArrayList<T> findByKeywordLike(Integer pageNo, Integer pageSize, String keyword, String value, Class<T> clazz);
 
+    public Boolean setActivated(Integer id, Integer activated);
 }

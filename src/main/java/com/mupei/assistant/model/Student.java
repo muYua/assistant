@@ -37,7 +37,7 @@ public class Student extends Role {
 	@Column(name = "stu_class")
 	private String stuClass;
 	// 入学年份
-	@Column(name = "stu_enrollmentYear")
+	@Column(name = "stu_enrollment_year")
 	private String enrollmentYear;
 
 }

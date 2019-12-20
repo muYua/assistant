@@ -11,8 +11,7 @@ require.config({
         'layui': { //layui不遵循于AMD规范
             deps: [''], //依赖的模块
             exports: 'layui'
-        },
-        'background': ['jquery'],
+        }
     }
 });
 

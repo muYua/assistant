@@ -19,7 +19,7 @@ import lombok.ToString;
 @Table(name = "tb_teacher")
 public class Teacher extends Role {
 	// 教工号
-	@Column(name = "t_workNumber")
+	@Column(name = "t_work_number")
 	private String workNumber;
 	// 学历
 	@Column(name = "t_education")

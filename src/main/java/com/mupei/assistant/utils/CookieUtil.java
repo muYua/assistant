@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 public class CookieUtil {
 
 	/**
-	 * @description 设置Cookie
+	 * 设置Cookie
+	 *
 	 * @param key      Cookie的ID
 	 * @param value    Cookie的值
 	 * @param maxAge   生命周期，以秒为单位。
@@ -33,7 +34,8 @@ public class CookieUtil {
 	}
 
 	/**
-	 * @description 获取Cookie
+	 * 获取Cookie
+	 *
 	 * @param key     Cookie的ID
 	 * @param request
 	 * @return Cookie
@@ -50,9 +52,10 @@ public class CookieUtil {
 	}
 
 	/**
-	 * @description 将Cookie封装到Map集合中
+	 * 将Cookie封装到Map集合中
+	 *
 	 * @param request
-	 * @return Map<String, Cookie> Cookie的Map键值对集合
+	 * @return Cookie的Map键值对集合
 	 */
 	private Map<String, Cookie> getCookies(HttpServletRequest request) {
 		Map<String, Cookie> cookieMap = new HashMap<String, Cookie>();

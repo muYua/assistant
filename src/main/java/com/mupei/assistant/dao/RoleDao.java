@@ -12,12 +12,13 @@ import com.mupei.assistant.model.Role;
 import io.lettuce.core.dynamic.annotation.Param;
 
 /**
- * @description Tips
+ * Tips
+ *
  * @author MUYUA
- * @tips 不用加@Repository注解,CrudRepository已经是IOC容器组件了
- * @tips JPA可以自动语句查询派生关键词（findBy..And..）
- * @tips @Query(nativeQuery = true) // 执行原生SQL语句
- * @tips @Query("...#{page.pageSize}...") public Object findByPage(Page page); //取封装对象属性
+ * @ 不用加@Repository注解,CrudRepository已经是IOC容器组件了
+ * @ JPA可以自动语句查询派生关键词（findBy..And..）
+ * @ @Query(nativeQuery = true) // 执行原生SQL语句
+ * @ @Query("...#{page.pageSize}...") public Object findByPage(Page page); //取封装对象属性
  */
  
 public interface RoleDao extends CrudRepository<Role, Integer> {
@@ -45,6 +46,7 @@ public interface RoleDao extends CrudRepository<Role, Integer> {
 	public ArrayList<Role> findByQqLike(String value, Pageable pageable);
 	public ArrayList<Role> findByNicknameLike(String value, Pageable pageable);
 	public ArrayList<Role> findByNameLike(String value, Pageable pageable);
+	public ArrayList<Role> findByIpLike(String value, Pageable pageable);
 	public ArrayList<Role> findByType(Integer value, Pageable pageable);
 	//总数计数
 	public Long countByEmailContaining(String value, Sort sort);
@@ -52,6 +54,8 @@ public interface RoleDao extends CrudRepository<Role, Integer> {
 	public Long countByQqContaining(String value, Sort sort);
 	public Long countByNicknameContaining(String value, Sort sort);
 	public Long countByNameContaining(String value, Sort sort);
+	public Long countByIpContaining(String value, Sort sort);
 	public Long countByType(Integer value, Sort sort);
-	
+
+
 }
