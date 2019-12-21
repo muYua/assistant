@@ -156,26 +156,29 @@
             </div>
         </div>
 
-        <!-- Role表单 -->
-        <table class="layui-hide" id="roleInfoForm" lay-filter="roleInfoForm"></table>
-        <script type="text/html" id="roleInfoFormToolbar">
-            <div class="layui-inline" title="新添数据" lay-event="add">
-                <i class="layui-icon layui-icon-add-1" style="color: #555;"></i>
-            </div>
-            <div class="layui-inline" title="删除数据" lay-event="delete">
-                <i class="layui-icon layui-icon-delete" style="color: #555;"></i>
-            </div>
-            <div class="layui-inline" title="获取选中数目" lay-event="getCheckLength">
-                <i class="layui-icon layui-icon-tips" style="color: #555;"></i>
-            </div>
-            <div class="layui-inline" title="刷新表单" lay-event="flush">
-                <i class="layui-icon layui-icon-refresh-3" style="color: #555;"></i>
-            </div>
-        </script>
-        <script type="text/html" id="roleInfoFormRowBar">
-            <a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="update">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
+        <!-- table -->
+        <div id="dataTable">
+            <table class="layui-hide" id="roleInfoTable" lay-filter="roleInfoTable"></table>
+            <script type="text/html" id="roleInfoTableToolbar">
+                <div class="layui-inline" title="新添数据" lay-event="add">
+                    <i class="layui-icon layui-icon-add-1" style="color: #555;"></i>
+                </div>
+                <div class="layui-inline" title="删除数据" lay-event="delete">
+                    <i class="layui-icon layui-icon-delete" style="color: #555;"></i>
+                </div>
+                <div class="layui-inline" title="获取选中数目" lay-event="getCheckLength">
+                    <i class="layui-icon layui-icon-tips" style="color: #555;"></i>
+                </div>
+                <div class="layui-inline" title="刷新表单" lay-event="flush">
+                    <i class="layui-icon layui-icon-refresh-3" style="color: #555;"></i>
+                </div>
+            </script>
+            <script type="text/html" id="roleInfoTableRowBar">
+                <a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="update">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+        </div>
+        <!-- //table -->
     </div>
 
     <div class="layui-footer">

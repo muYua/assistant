@@ -14,18 +14,19 @@ require.config({
 });
 
 require(['layui', 'utils'], function (layui, utils) {
-    layui.use(['table', 'element'], function () {
+    layui.use(['table', 'element', 'form'], function () {
         let table = layui.table
             , element = layui.element //导航的hover效果、二级菜单等功能，需要依赖element模块
+            , form = layui.form
             , $ = layui.$; //使用layui内置的JQuery，table依赖layer，layer依赖JQuery
         //数据表格
         table.render({
-            elem: '#roleInfoForm'
-            , id: 'roleInfoForm'
-            // , height: 580 //注解后表单高度自适应
+            elem: '#roleInfoTable'
+            // , id: 'roleInfoTable'
+            // , height: 580 //注释后表单高度自适应
             , url: 'http://127.0.0.1:8080/assistant/admin/getRolesByPage' //数据接口
-            , where: {} //设定异步数据接口的额外参数
-            , toolbar: '#roleInfoFormToolbar' //开启头部工具栏，并为其绑定左侧模板
+            // , where: {} //设定异步数据接口的额外参数
+            , toolbar: '#roleInfoTableToolbar' //开启头部工具栏，并为其绑定左侧模板
             , title: 'Role账号数据表'
             // , page: true //开启分页
             , page: { //开启分页
@@ -51,12 +52,12 @@ require(['layui', 'utils'], function (layui, utils) {
                 , {field: 'lastLogOutTime', title: '最近一次登出时间', minWidth: 160}
                 , {field: 'ip', title: 'IP地址', minWidth: 130}
                 , {field: 'activated', title: '账号状态', minWidth: 102, sort: true}
-                , {fixed: 'right', title: '操作', toolbar: '#roleInfoFormRowBar', width: 112}
+                , {fixed: 'right', title: '操作', toolbar: '#roleInfoTableRowBar', width: 112}
             ]]
         });//end 数据表格
 
         //头工具栏事件
-        table.on('toolbar(roleInfoForm)', function (obj) { //toolbar(lay-filter)
+        table.on('toolbar(roleInfoTable)', function (obj) { //toolbar(lay-filter)
             let checkStatus = table.checkStatus(obj.config.id)
                 , data = checkStatus.data; //获取选中的数据
 
@@ -80,7 +81,7 @@ require(['layui', 'utils'], function (layui, utils) {
                         content: 'addRoleForm.html'
                     });
                     //重载数据表格
-                    table.reload('roleInfoForm', {
+                    table.reload('roleInfoTable', {
                         where: {}//设定异步数据接口的额外参数，任意设
                         , page: {
                             curr: 1 //获取起始页，重新从第 1 页开始
@@ -103,7 +104,7 @@ require(['layui', 'utils'], function (layui, utils) {
                                 success: function (data) {
                                     if (data.success) {
                                         //重载数据表格
-                                        table.reload('roleInfoForm', {
+                                        table.reload('roleInfoTable', {
                                             where: {}//设定异步数据接口的额外参数，任意设
                                             , page: {
                                                 curr: 1 //获取起始页，重新从第 1 页开始
@@ -127,7 +128,7 @@ require(['layui', 'utils'], function (layui, utils) {
                     layer.msg('选中了：' + data.length + ' 个');
                     break;//getCheckLength
                 case 'flush':
-                    table.reload('roleInfoForm', {
+                    table.reload('roleInfoTable', {
                         url: 'http://127.0.0.1:8080/assistant/admin/getRolesByPage'
                         , page: {
                             curr: 1 //获取起始页，重新从第 1 页开始
@@ -139,7 +140,7 @@ require(['layui', 'utils'], function (layui, utils) {
         });//end 头工具栏事件
 
         //监听行工具事件
-        table.on('tool(roleInfoForm)', function (obj) {
+        table.on('tool(roleInfoTable)', function (obj) {
 
             let data = obj.data;
             switch (obj.event) {
@@ -156,7 +157,7 @@ require(['layui', 'utils'], function (layui, utils) {
                             success: function (data) {
                                 if (data.success) {
                                     //重载数据表格
-                                    table.reload('roleInfoForm', {
+                                    table.reload('roleInfoTable', {
                                         where: {}//设定异步数据接口的额外参数，任意设
                                         , page: {
                                             curr: 1 //获取起始页，重新从第 1 页开始
@@ -193,94 +194,6 @@ require(['layui', 'utils'], function (layui, utils) {
                         content: 'updateRoleForm.html'
                     });//end layer.open
                     break; //end update
-                case "activate":
-                    layer.confirm('正在进行激活操作，确定继续吗？', function (index) {
-                        $.ajax({
-                            url: "/assistant/admin/activateRole",
-                            data: {
-                                id: data.id,
-                                activated: 1
-                            },
-                            dataType: 'json',//服务器返回json格式数据
-                            type: 'put',//HTTP请求类型
-                            timeout: 10000,//超时时间设置为10秒
-                            success: function (data) {
-                                if (data.success) {
-                                    //重载数据表格
-                                    table.reload('roleInfoForm', {
-                                        where: {}//设定异步数据接口的额外参数，任意设
-                                        , page: {
-                                            curr: 1 //获取起始页，重新从第 1 页开始
-                                        }
-                                        , title: 'Role账号数据表'
-                                        , toolbar: false
-                                        , cols: [[ //表头
-                                            {type: 'checkbox', fixed: 'left'}
-                                            , {field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left'}
-                                            , {field: 'email', title: '电子邮箱', minWidth: 176}
-                                            , {field: 'phoneNumber', title: '手机号码', width: 120}
-                                            , {field: 'ip', title: 'IP地址', minWidth: 130}
-                                            , {field: 'activated', title: '账号状态', minWidth: 102, sort: true}
-                                            , {fixed: 'right', title: '操作', toolbar: '#roleInfoFormRowBar', width: 112}
-                                        ]]
-                                    }); //end table.reload
-
-                                    layer.close(index);
-                                }//end if
-                            },
-                            error: function (xhr, type, errorThrown) {
-                                console.log(xhr);
-                                console.log(type);
-                                console.log(errorThrown);
-                            }
-
-                        });//end ajax
-                    });//end layer.confirm
-                    break;//activate
-                case "freeze":
-                    layer.confirm('正在进行冻结操作，确定继续吗？', function (index) {
-                        $.ajax({
-                            url: "/assistant/admin/activateRole",
-                            data: {
-                                id: data.id,
-                                activated: 0
-                            },
-                            dataType: 'json',//服务器返回json格式数据
-                            type: 'put',//HTTP请求类型
-                            timeout: 10000,//超时时间设置为10秒
-                            success: function (data) {
-                                if (data.success) {
-                                    //重载数据表格
-                                    table.reload('roleInfoForm', {
-                                        where: {}//设定异步数据接口的额外参数，任意设
-                                        , page: {
-                                            curr: 1 //获取起始页，重新从第 1 页开始
-                                        }
-                                        , title: 'Role账号数据表'
-                                        , toolbar: false
-                                        , cols: [[ //表头
-                                            {type: 'checkbox', fixed: 'left'}
-                                            , {field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left'}
-                                            , {field: 'email', title: '电子邮箱', minWidth: 176}
-                                            , {field: 'phoneNumber', title: '手机号码', width: 120}
-                                            , {field: 'ip', title: 'IP地址', minWidth: 130}
-                                            , {field: 'activated', title: '账号状态', minWidth: 102, sort: true}
-                                            , {fixed: 'right', title: '操作', toolbar: '#roleInfoFormRowBar', width: 112}
-                                        ]]
-                                    }); //end table.reload
-
-                                    layer.close(index);
-                                }//end if
-                            },
-                            error: function (xhr, type, errorThrown) {
-                                console.log(xhr);
-                                console.log(type);
-                                console.log(errorThrown);
-                            }
-
-                        });//end ajax
-                    });//end layer.confirm
-                    break;//freeze
             }//switch
         });//end 监听行工具事件
 
@@ -294,7 +207,7 @@ require(['layui', 'utils'], function (layui, utils) {
                     , select = SELECT_DOM.val();
 
                 //重载数据表格
-                table.reload('roleInfoForm', {
+                table.reload('roleInfoTable', {
                     url: 'http://127.0.0.1:8080/assistant/admin/getRolesByKeyword'
                     , method: 'get'
                     , where: {
@@ -309,7 +222,7 @@ require(['layui', 'utils'], function (layui, utils) {
         });//end 监听搜索事件
 
         //监听行点击事件
-        table.on('row(roleInfoForm)', function (obj) {
+        table.on('row(roleInfoTable)', function (obj) {
             //标注选中行样式
             obj.tr.addClass("layui-table-click").siblings().removeClass("layui-table-click");
         });//end 监听行点击事件
@@ -317,25 +230,23 @@ require(['layui', 'utils'], function (layui, utils) {
         //账号信息
         $("#roleInfo").on("click", function () {
             window.location.reload();
-        });
+        }); //end 账号信息
 
         //激活管理
         $("#roleActivate").on("click", function () {
             $(this).addClass("layui-this").siblings().removeClass("layui-this");//选中高亮
+
             //面包屑
-            $("#breadcrumb").html(`
+            const BREADCRUMB_DIV = $("#breadcrumb");
+            BREADCRUMB_DIV.empty();
+            BREADCRUMB_DIV.html(`
                 <span class="layui-breadcrumb">
                     <a href="#">用户信息</a>
                     <a href="#">账号信息</a>
                     <a><cite>激活管理</cite></a>
                 </span>
             `);
-
-            //行工具栏
-            $("#roleInfoFormRowBar").html(`
-                <a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="activate">激活</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="freeze">冻结</a>
-            `);
+            element.render('breadcrumb');
 
             //搜索下拉选项
             $("#searchSelect").html(`
@@ -343,16 +254,64 @@ require(['layui', 'utils'], function (layui, utils) {
                 <option value="phoneNumber">手机号码</option>
                 <option value="ip">IP</option>
             `);
+            form.render();//重新渲染
+            //监听搜索框
+            $("input[name='search']").off().on("keyup", function () { //移除原先所写的事件处理程序再进行事件监听
+                if (utils.isPressEnter()) {//按下回车执行
+                    const SEARCH_DOM = $(this)
+                        , SELECT_DOM = $("select[name='search']")
+                        , searchCValue = SEARCH_DOM.val()
+                        , select = SELECT_DOM.val();
 
+                    //重载数据表格
+                    table.reload('activateRoleInfoTable', {
+                        url: 'http://127.0.0.1:8080/assistant/admin/getRolesByKeyword'
+                        , method: 'get'
+                        , where: {
+                            keyword: select,
+                            value: searchCValue
+                        }//设定异步数据接口的额外参数，任意设
+                        , page: {
+                            curr: 1 //获取起始页，重新从第 1 页开始
+                        }
+                    });//end table.reload
+                }//end if
+            });//end 监听搜索事件
 
-            //重载数据表格
-            table.reload('roleInfoForm', {
-                where: {}//设定异步数据接口的额外参数，任意设
-                , page: {
-                    curr: 1 //获取起始页，重新从第 1 页开始
+            //数据表格重载
+            const DATA_TABLE_DIV = $("#dataTable");
+            DATA_TABLE_DIV.empty(); //清空数据表的DOM结构
+            //重新构建DOM结构
+            DATA_TABLE_DIV.html(`
+                <table class="layui-hide" id="activateRoleInfoTable" lay-filter="activateRoleInfoTable"></table>
+                <script type="text/html" id="activateRoleInfoTableToolbar">
+                    <div class="layui-inline" title="获取选中数目" lay-event="getCheckLength">
+                        <i class="layui-icon layui-icon-tips" style="color: #555;"></i>
+                    </div>
+                    <div class="layui-inline" title="刷新表单" lay-event="flush">
+                        <i class="layui-icon layui-icon-refresh-3" style="color: #555;"></i>
+                    </div>
+                </script>
+                <script type="text/html" id="activateRoleInfoTableRowBar">
+                    <a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="activate">激活</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deactivate">停用</a>
+                </script>
+            `);
+            //对重建的DOM进行渲染
+            table.render({
+                elem: '#activateRoleInfoTable'
+                , id: 'activateRoleInfoTable'
+                // , height: 580 //注解后表单高度自适应
+                , url: 'http://127.0.0.1:8080/assistant/admin/getRolesByPage' //数据接口
+                , where: {} //设定异步数据接口的额外参数
+                , toolbar: '#activateRoleInfoTableToolbar' //开启头部工具栏，并为其绑定左侧模板
+                , title: 'Role激活数据表'
+                // , page: true //开启分页
+                , page: { //开启分页
+                    curr: 1 //重新从第 1 页开始
                 }
-                , title: 'Role账号数据表'
-                , toolbar: false
+                , limit: 10
+                , limits: [10, 20, 30, 50, 100]
                 , cols: [[ //表头
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left'}
@@ -360,11 +319,118 @@ require(['layui', 'utils'], function (layui, utils) {
                     , {field: 'phoneNumber', title: '手机号码', width: 120}
                     , {field: 'ip', title: 'IP地址', minWidth: 130}
                     , {field: 'activated', title: '账号状态', minWidth: 102, sort: true}
-                    , {fixed: 'right', title: '操作', toolbar: '#roleInfoFormRowBar', width: 112}
+                    , {fixed: 'right', title: '操作', toolbar: '#activateRoleInfoTableRowBar', width: 112}
                 ]]
-            }); //end table.reload
+            });//end table.render
 
-        });
+            //监听行点击事件
+            table.on('row(activateRoleInfoTable)', function (obj) {
+                //标注选中行样式
+                obj.tr.addClass("layui-table-click").siblings().removeClass("layui-table-click");
+            });//end 监听行点击事件
+
+            //监听行工具事件
+            table.on('tool(activateRoleInfoTable)', function (obj) {
+                let data = obj.data;
+                switch (obj.event) {
+                    case "activate":
+                        if(data.activated === 1){
+                            layer.msg("已经激活了，不需要再进行操作！",{time:2000});
+                            return false;
+                        }
+                        layer.confirm('正在进行激活操作，确定继续吗？', function (index) {
+                            $.ajax({
+                                url: "/assistant/admin/activateRole",
+                                data: {
+                                    id: data.id,
+                                    activated: 1
+                                },
+                                dataType: 'json',//服务器返回json格式数据
+                                type: 'put',//HTTP请求类型
+                                timeout: 10000,//超时时间设置为10秒
+                                success: function (data) {
+                                    if (data.success) {
+                                        //重载数据表格
+                                        table.reload('activateRoleInfoTable', {
+                                            page: {
+                                                curr: 1 //获取起始页，重新从第 1 页开始
+                                            }
+                                            , title: 'Role激活数据表'
+                                        }); //end table.reload
+
+                                        layer.close(index);
+                                    }//end if
+                                },
+                                error: function (xhr, type, errorThrown) {
+                                    console.log(xhr);
+                                    console.log(type);
+                                    console.log(errorThrown);
+                                }
+
+                            });//end ajax
+                        });//end layer.confirm
+                        break;//activate
+                    case "deactivate":
+                        if(data.activated === 0){
+                            layer.msg("已经停用了，不需要再进行操作！",{time:2000});
+                            return false;
+                        }
+                        layer.confirm('正在进行停用操作，确定继续吗？', function (index) {
+                            $.ajax({
+                                url: "/assistant/admin/activateRole",
+                                data: {
+                                    id: data.id,
+                                    activated: 0
+                                },
+                                dataType: 'json',//服务器返回json格式数据
+                                type: 'put',//HTTP请求类型
+                                timeout: 10000,//超时时间设置为10秒
+                                success: function (data) {
+                                    if (data.success) {
+                                        //重载数据表格
+                                        table.reload('activateRoleInfoTable', {
+                                            page: {
+                                                curr: 1 //获取起始页，重新从第 1 页开始
+                                            }
+                                            , title: 'Role激活数据表'
+                                        }); //end table.reload
+
+                                        layer.close(index);
+                                    }//end if
+                                },
+                                error: function (xhr, type, errorThrown) {
+                                    console.log(xhr);
+                                    console.log(type);
+                                    console.log(errorThrown);
+                                }
+
+                            });//end ajax
+                        });//end layer.confirm
+                        break;//freeze
+                }//switch
+            });//end 监听行工具事件
+
+            //监听头工具栏事件
+            table.on('toolbar(activateRoleInfoTable)', function (obj) {
+                let checkStatus = table.checkStatus(obj.config.id)
+                    , data = checkStatus.data; //获取选中的数据
+
+                switch (obj.event) {
+                    case 'getCheckLength':
+                        layer.msg('选中了：' + data.length + ' 个');
+                        break;//getCheckLength
+                    case 'flush':
+                        table.reload('activateRoleInfoTable', {
+                            page: {
+                                curr: 1 //获取起始页，重新从第 1 页开始
+                            }
+                        }); //end table.reload
+                        break;//flush
+                }//end switch(obj.event)
+
+            });//end 头工具栏事件
+
+        });//end 激活管理
 
         //头像管理
         $("#roleHeadPortraits").on("click", function () {
