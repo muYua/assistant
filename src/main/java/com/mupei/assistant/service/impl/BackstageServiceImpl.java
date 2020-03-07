@@ -31,15 +31,20 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
         switch (entity) {
             case "Role":
                 Iterable<Role> all = roleDao.findAll();
-                ArrayList<Role> list = new ArrayList<Role>();
+                ArrayList<Role> list = new ArrayList<>();
 
                 //Iterable转换为ArrayList
-//				Iterator<Role> iterator = all.iterator();
-//				while (iterator.hasNext())
-//					  list.add(iterator.next());
-                all.forEach(single -> {
+                /*Iterator<Role> iterator = all.iterator();
+				while (iterator.hasNext()) {
+                    list.add(iterator.next());
+                }*/
+                /*for (Role role : all) {
+                    list.add(role);
+                }*/
+                /*all.forEach(single -> {
                     list.add(single);
-                });
+                });*/
+                all.forEach(list::add);
 
                 return (ArrayList<T>) list;
 
@@ -52,7 +57,7 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
     /* 批量删除数据 */
     @Transactional
     @Override
-    public void deleteEntities(ArrayList<Integer> list, Class<T> clazz) {
+    public void deleteEntities(ArrayList<Long> list, Class<T> clazz) {
         String entity = clazz.getSimpleName();
 
         switch (entity) {
@@ -71,7 +76,7 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
     /* 删除数据 */
     @Transactional
     @Override
-    public void deleteEntity(Integer id, Class<T> clazz) {
+    public void deleteEntity(Long id, Class<T> clazz) {
         String entity = clazz.getSimpleName();
 
         switch (entity) {
@@ -115,9 +120,7 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
         switch (entity) {
             case "Role":
                 Role role = roleDao.save((Role) t);
-                if (StringUtils.isEmpty(role))
-                    return false;
-                return true;
+                return !StringUtils.isEmpty(role);
 
             default:
                 return false;
@@ -127,17 +130,12 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
     /* 通过ID得到数据 */
     @SuppressWarnings("unchecked")
     @Override
-    public T getEntityById(Integer id, Class<T> clazz) {
+    public T getEntityById(Long id, Class<T> clazz) {
         String entity = clazz.getSimpleName();
 
         switch (entity) {
             case "Role":
-                Optional<Role> optional = roleDao.findById(id);
-                Role role = optional.get();
-                if (StringUtils.isEmpty(role))
-                    return null;
-                return (T) role;
-
+                return (T) roleDao.findById(id).orElse(null); // roleOptional.isPresent() ? role.get() : null;
             default:
                 return null;
         }
@@ -224,6 +222,7 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
         }
     }
 
+    /* 模糊查询计数 */
     @Override
     public Long countByKeywordLike(String keyword, String value, Class<T> clazz) {
         String entity = clazz.getSimpleName();
@@ -260,14 +259,32 @@ public class BackstageServiceImpl<T> implements BackstageService<T> {
 
     }
 
+    /* 设置激活状态 */
     @Override
-    public Boolean setActivated(Integer id, Integer activated) {
+    public Boolean setActivated(Long id, Boolean activated) {
         Optional<Role> optionalRole = roleDao.findById(id);
-        Role role = optionalRole.get();
-        role.setActivated(activated);
-        roleDao.save(role);
+        if(optionalRole.isPresent()){
+            Role role = optionalRole.get();
+            role.setActivated(activated);
+            roleDao.save(role);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        return true;
+    /* 设置冻结秒数 */
+    @Override
+    public Boolean setFreezeSeconds(Long id, Long freezeSeconds) {
+        Optional<Role> optionalRole = roleDao.findById(id);
+        if(optionalRole.isPresent()){
+            Role role = optionalRole.get();
+            role.setFreezeSeconds(freezeSeconds);
+            roleDao.save(role);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisUtil {
+    // @Resource，按名字注入Bean组件：RedisTemplate<String, Object>，
+    // @Atuowired，按类型只能注入RedisTemplate、RedisTemplate<String,String>或StringRedisTemplate
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired

@@ -19,25 +19,25 @@ import lombok.ToString;
 @Table(name = "tb_stu")
 public class Student extends Role {
 	// 学号
-	@Column(name = "stu_number")
+	@Column(name = "stu_number", length = 16)
 	private String stuNumber;
 	// 所在地
 	@Column(name = "stu_address")
 	private String address;
 	// 学校
-	@Column(name = "stu_school")
+	@Column(name = "stu_school", length = 55)
 	private String school;
 	// 院系
-	@Column(name = "stu_department")
+	@Column(name = "stu_department", length = 20)
 	private String department;
 	// 专业
-	@Column(name = "stu_major")
+	@Column(name = "stu_major", length = 20)
 	private String major;
 	// 班级
-	@Column(name = "stu_class")
+	@Column(name = "stu_class", length = 28)
 	private String stuClass;
-	// 入学年份
-	@Column(name = "stu_enrollment_year")
-	private String enrollmentYear;
+	// 入学时间
+	@Column(name = "stu_enrollment_time", length = 10)
+	private String enrollmentTime;
 
 }

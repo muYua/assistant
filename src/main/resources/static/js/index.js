@@ -69,6 +69,9 @@ require(['jquery', 'layui', 'utils', 'encrypt', 'background', 'iconfont'], funct
                         localStorage.setItem("token", encrypt.encryptWithAES(obj.token, obj.key, obj.vi));
                         localStorage.setItem("type", encrypt.encryptWithAES(obj.type, obj.key, obj.vi));
                         localStorage.setItem("id", encrypt.encryptWithAES(obj.id, obj.key, obj.vi));
+
+                        console.log(obj.type);
+                        console.log('===========^');
                         //跳转主页
                         if(obj.type === 0)
                             window.location.href = 'backstage/index.html';

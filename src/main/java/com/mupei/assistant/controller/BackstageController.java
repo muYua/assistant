@@ -161,7 +161,7 @@ public class BackstageController<T> {
     @SuppressWarnings("unchecked")
     @NoVerifyToken
     @DeleteMapping("/delete{entity}")
-    public Json deleteEntity(@RequestParam("id") Integer id, @PathVariable("entity") String entity, Class<T> clazz, HttpServletRequest request) {
+    public Json deleteEntity(@RequestParam("id") Long id, @PathVariable("entity") String entity, Class<T> clazz, HttpServletRequest request) {
         Json json = new Json();
 
         if (id == null) {
@@ -195,7 +195,7 @@ public class BackstageController<T> {
     @SuppressWarnings("unchecked")
     @NoVerifyToken
     @DeleteMapping("/delete{entity}s")
-    public Json deleteRoles(@RequestParam("idList") ArrayList<Integer> idList, @PathVariable("entity") String entity, Class<T> clazz, HttpServletRequest request) {
+    public Json deleteRoles(@RequestParam("idList") ArrayList<Long> idList, @PathVariable("entity") String entity, Class<T> clazz, HttpServletRequest request) {
         Json json = new Json();
 
         if (idList == null) {
@@ -255,7 +255,9 @@ public class BackstageController<T> {
 
                 role.setRegTime(time);
                 role.setIp(ipAddr);
-                role.setActivated(1); //默认激活账号
+                role.setActivated(true); //默认激活账号
+                role.setFreezeSeconds(0L); //清空冻结时间
+                role.setImage("/images/head-portraits/admin.jpg"); //默认头像
 
                 log.debug("【/admin/addRole】添加时间>>{}", time);
                 log.debug("【/admin/addRole】IP地址>>{}", ipAddr);
@@ -319,16 +321,17 @@ public class BackstageController<T> {
 
                 //将未被修改的属性数据部分存入role，组成最终的实体（省去了对修改数据的筛选，传入的数据可能是原封不动的）
                 //可能修改属性：nickname、password、type、name、sex、birthday、phoneNumber、qq
-                //其他属性：（id、email、）image、activated、regTime、lastLogInTime、lastLogOutTime、ip
+                //其他属性：（id、email、）image、activated、freezeSeconds、regTime、lastLogInTime、lastLogOutTime、ip
                 role.setImage(lastRole.getImage());
                 role.setActivated(lastRole.getActivated());
+                role.setFreezeSeconds(lastRole.getFreezeSeconds());
                 role.setRegTime(lastRole.getRegTime());
                 role.setLastLogInTime(lastRole.getLastLogInTime());
                 role.setLastLogOutTime(lastRole.getLastLogOutTime());
                 role.setIp(ipAddr);
 
                 String password = role.getPassword();
-                //如果该Role密码进行修改过
+                //如果该Role密码进行修改过t
                 if (!StringUtils.isEmpty(password)) {
                     // 算法加密
                     String sha256 = encryptUtil.encryptWithSHA(password, "SHA-256");
@@ -362,7 +365,7 @@ public class BackstageController<T> {
     @SuppressWarnings("unchecked")
     @NoVerifyToken
     @PutMapping("/activateRole")
-    public Json activateEntity(@RequestParam Integer id, @RequestParam Integer activated, HttpServletRequest request) {
+    public Json activateRole(@RequestParam Long id, @RequestParam Boolean activated, HttpServletRequest request) {
         Json json = new Json();
 
         if (activated == null) {
@@ -383,10 +386,48 @@ public class BackstageController<T> {
         log.debug("【/admin/activateRole】IP地址>>{}", ipAddr);
 
         if (isActivate) {
-            log.debug("【/admin/activateRole】账号状态>>{}，设置状态成功！", activated);
+            log.debug("【/admin/activateRole】激活状态>>{}，设置状态成功！", activated);
             json.setSuccess(true);
         } else {
-            log.error("【/admin/activateRole】账号状态>>{}，设置状态失败！", activated);
+            log.error("【/admin/activateRole】激活状态>>{}，设置状态失败！", activated);
+            json.setSuccess(false);
+        }
+
+        return json;
+    }
+
+    @SuppressWarnings("unchecked")
+    @NoVerifyToken
+    @PutMapping("/freezeRole")
+    public Json freezeRole(@RequestParam Long id, @RequestParam Long freezeSeconds ,HttpServletRequest request) {
+        Json json = new Json();
+
+        if (freezeSeconds == null) {
+            json.setSuccess(false);
+            return json;
+        }
+
+        // 获取时间
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai")); // 设置北京时区
+        String time = simpleDateFormat.format(new Date()); // new Date()为获取当前系统时间
+
+        // 获取IP
+        String ipAddr = ipAddressUtil.getIpAddr(request);
+
+        log.debug("【/admin/freezeRole】时间>>{}", time);
+        log.debug("【/admin/freezeRole】IP地址>>{}", ipAddr);
+
+        Boolean isFreeze = backstageService.setFreezeSeconds(id, freezeSeconds);
+
+        if (isFreeze) {
+            if(freezeSeconds.equals(0L)){
+                log.debug("【/admin/freezeRole】解冻成功！");
+            } else {
+                log.debug("【/admin/freezeRole】冻结状态>>{}，设置状态成功！", freezeSeconds);
+            }
+            json.setSuccess(true);
+        } else {
+            log.error("【/admin/freezeRole】冻结状态>>{}，设置状态失败！", freezeSeconds);
             json.setSuccess(false);
         }
 

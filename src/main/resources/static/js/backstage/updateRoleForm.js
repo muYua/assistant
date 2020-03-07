@@ -32,6 +32,8 @@ require(['layui', 'utils', 'encrypt', 'iconfont'], function (layui, utils, encry
         let updateData = localStorage.getItem("updateData");
         //表单赋值
         form.val("upateRoleForm", JSON.parse(updateData));
+        //清空相关本地数据
+        localStorage.removeItem("updateData");
 
         //监听提交
         form.on('submit(update)', function (data) {

@@ -51,7 +51,8 @@ require(['layui', 'utils'], function (layui, utils) {
                 , {field: 'lastLogInTime', title: '最近一次登入时间', minWidth: 160}
                 , {field: 'lastLogOutTime', title: '最近一次登出时间', minWidth: 160}
                 , {field: 'ip', title: 'IP地址', minWidth: 130}
-                , {field: 'activated', title: '账号状态', minWidth: 102, sort: true}
+                , {field: 'activated', title: '激活状态', minWidth: 102, sort: true}
+                , {field: 'freezeSeconds', title: '冻结秒数', minWidth: 102, sort: true}
                 , {fixed: 'right', title: '操作', toolbar: '#roleInfoTableRowBar', width: 112}
             ]]
         });//end 数据表格
@@ -255,6 +256,7 @@ require(['layui', 'utils'], function (layui, utils) {
                 <option value="ip">IP</option>
             `);
             form.render();//重新渲染
+
             //监听搜索框
             $("input[name='search']").off().on("keyup", function () { //移除原先所写的事件处理程序再进行事件监听
                 if (utils.isPressEnter()) {//按下回车执行
@@ -318,7 +320,7 @@ require(['layui', 'utils'], function (layui, utils) {
                     , {field: 'email', title: '电子邮箱', minWidth: 176}
                     , {field: 'phoneNumber', title: '手机号码', width: 120}
                     , {field: 'ip', title: 'IP地址', minWidth: 130}
-                    , {field: 'activated', title: '账号状态', minWidth: 102, sort: true}
+                    , {field: 'activated', title: '激活状态', minWidth: 102, sort: true}
                     , {fixed: 'right', title: '操作', toolbar: '#activateRoleInfoTableRowBar', width: 112}
                 ]]
             });//end table.render
@@ -334,7 +336,7 @@ require(['layui', 'utils'], function (layui, utils) {
                 let data = obj.data;
                 switch (obj.event) {
                     case "activate":
-                        if(data.activated === 1){
+                        if(data.activated){
                             layer.msg("已经激活了，不需要再进行操作！",{time:2000});
                             return false;
                         }
@@ -343,7 +345,7 @@ require(['layui', 'utils'], function (layui, utils) {
                                 url: "/assistant/admin/activateRole",
                                 data: {
                                     id: data.id,
-                                    activated: 1
+                                    activated: true
                                 },
                                 dataType: 'json',//服务器返回json格式数据
                                 type: 'put',//HTTP请求类型
@@ -357,7 +359,6 @@ require(['layui', 'utils'], function (layui, utils) {
                                             }
                                             , title: 'Role激活数据表'
                                         }); //end table.reload
-
                                         layer.close(index);
                                     }//end if
                                 },
@@ -366,12 +367,11 @@ require(['layui', 'utils'], function (layui, utils) {
                                     console.log(type);
                                     console.log(errorThrown);
                                 }
-
                             });//end ajax
                         });//end layer.confirm
                         break;//activate
                     case "deactivate":
-                        if(data.activated === 0){
+                        if(!data.activated){
                             layer.msg("已经停用了，不需要再进行操作！",{time:2000});
                             return false;
                         }
@@ -380,7 +380,7 @@ require(['layui', 'utils'], function (layui, utils) {
                                 url: "/assistant/admin/activateRole",
                                 data: {
                                     id: data.id,
-                                    activated: 0
+                                    activated: false
                                 },
                                 dataType: 'json',//服务器返回json格式数据
                                 type: 'put',//HTTP请求类型
@@ -394,7 +394,6 @@ require(['layui', 'utils'], function (layui, utils) {
                                             }
                                             , title: 'Role激活数据表'
                                         }); //end table.reload
-
                                         layer.close(index);
                                     }//end if
                                 },
@@ -403,10 +402,9 @@ require(['layui', 'utils'], function (layui, utils) {
                                     console.log(type);
                                     console.log(errorThrown);
                                 }
-
                             });//end ajax
                         });//end layer.confirm
-                        break;//freeze
+                        break;//deactivate
                 }//switch
             });//end 监听行工具事件
 
@@ -432,10 +430,205 @@ require(['layui', 'utils'], function (layui, utils) {
 
         });//end 激活管理
 
+        //冻结管理
+        $("#roleFreeze").on("click", function () {
+            $(this).addClass("layui-this").siblings().removeClass("layui-this");//选中高亮
+
+            //面包屑
+            const BREADCRUMB_DIV = $("#breadcrumb");
+            BREADCRUMB_DIV.empty();
+            BREADCRUMB_DIV.html(`
+                <span class="layui-breadcrumb">
+                    <a href="#">用户信息</a>
+                    <a href="#">账号信息</a>
+                    <a><cite>冻结管理</cite></a>
+                </span>
+            `);
+            element.render('breadcrumb');
+
+            //搜索下拉选项
+            $("#searchSelect").html(`
+                <option value="email">电子邮箱</option>
+                <option value="phoneNumber">手机号码</option>
+                <option value="ip">IP</option>
+            `);
+            form.render();//重新渲染
+
+            //监听搜索框
+            $("input[name='search']").off().on("keyup", function () { //移除原先所写的事件处理程序再进行事件监听
+                if (utils.isPressEnter()) {//按下回车执行
+                    const SEARCH_DOM = $(this)
+                        , SELECT_DOM = $("select[name='search']")
+                        , searchCValue = SEARCH_DOM.val()
+                        , select = SELECT_DOM.val();
+
+                    //重载数据表格
+                    table.reload('freezeRoleInfoTable', {
+                        url: 'http://127.0.0.1:8080/assistant/admin/getRolesByKeyword'
+                        , method: 'get'
+                        , where: {
+                            keyword: select,
+                            value: searchCValue
+                        }//设定异步数据接口的额外参数，任意设
+                        , page: {
+                            curr: 1 //获取起始页，重新从第 1 页开始
+                        }
+                    });//end table.reload
+                }//end if
+            });//end 监听搜索事件
+
+            //数据表格重载
+            const DATA_TABLE_DIV = $("#dataTable");
+            DATA_TABLE_DIV.empty(); //清空数据表的DOM结构
+            //重新构建DOM结构
+            DATA_TABLE_DIV.html(`
+                <table class="layui-hide" id="freezeRoleInfoTable" lay-filter="freezeRoleInfoTable"></table>
+                <script type="text/html" id="freezeRoleInfoTableToolbar">
+                    <div class="layui-inline" title="获取选中数目" lay-event="getCheckLength">
+                        <i class="layui-icon layui-icon-tips" style="color: #555;"></i>
+                    </div>
+                    <div class="layui-inline" title="刷新表单" lay-event="flush">
+                        <i class="layui-icon layui-icon-refresh-3" style="color: #555;"></i>
+                    </div>
+                </script>
+                <script type="text/html" id="freezeRoleInfoTableRowBar">
+                    <a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="unfreeze">解封</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="freeze">冻结</a>
+                </script>
+            `);
+            //对重建的DOM进行渲染
+            table.render({
+                elem: '#freezeRoleInfoTable'
+                , id: 'freezeRoleInfoTable'
+                // , height: 580 //注解后表单高度自适应
+                , url: 'http://127.0.0.1:8080/assistant/admin/getRolesByPage' //数据接口
+                , where: {} //设定异步数据接口的额外参数
+                , toolbar: '#freezeRoleInfoTableToolbar' //开启头部工具栏，并为其绑定左侧模板
+                , title: 'Role冻结数据表'
+                // , page: true //开启分页
+                , page: { //开启分页
+                    curr: 1 //重新从第 1 页开始
+                }
+                , limit: 10
+                , limits: [10, 20, 30, 50, 100]
+                , cols: [[ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left'}
+                    , {field: 'email', title: '电子邮箱', minWidth: 176}
+                    , {field: 'phoneNumber', title: '手机号码', width: 120}
+                    , {field: 'ip', title: 'IP地址', minWidth: 130}
+                    , {field: 'freezeSeconds', title: '冻结秒数', minWidth: 102, sort: true}
+                    , {fixed: 'right', title: '操作', toolbar: '#freezeRoleInfoTableRowBar', width: 112}
+                ]]
+            });//end table.render
+
+            //监听行点击事件
+            table.on('row(freezeRoleInfoTable)', function (obj) {
+                //标注选中行样式
+                obj.tr.addClass("layui-table-click").siblings().removeClass("layui-table-click");
+            });//end 监听行点击事件
+
+            //监听行工具事件
+            table.on('tool(freezeRoleInfoTable)', function (obj) {
+                let data = obj.data;
+                switch (obj.event) {
+                    case "unfreeze":
+                        if(data.freezeSeconds === 0){
+                            layer.msg("已经解冻了，不需要再进行操作！",{time:2000});
+                            return false;
+                        }
+                        layer.confirm('正在进行解冻操作，确定继续吗？', function (index) {
+                            $.ajax({
+                                url: "/assistant/admin/freezeRole",
+                                data: {
+                                    id: data.id,
+                                    freezeSeconds: 0
+                                },
+                                dataType: 'json',//服务器返回json格式数据
+                                type: 'put',//HTTP请求类型
+                                timeout: 10000,//超时时间设置为10秒
+                                success: function (data) {
+                                    if (data.success) {
+                                        //重载数据表格
+                                        table.reload('freezeRoleInfoTable', {
+                                            page: {
+                                                curr: 1 //获取起始页，重新从第 1 页开始
+                                            }
+                                        }); //end table.reload
+                                        layer.close(index);
+                                    }//end if
+                                },
+                                error: function (xhr, type, errorThrown) {
+                                    console.log(xhr);
+                                    console.log(type);
+                                    console.log(errorThrown);
+                                }
+                            });//end ajax
+                        });//end layer.confirm
+                        break;//unfreeze
+                    case "freeze":
+                        localStorage.setItem("freezeId", data.id);
+                        layer.open({
+                            type: 2, //iframe层
+                            area: ['590px', '210px'], //宽高
+                            fixed: true, //固定
+                            maxmin: false, //最大小化
+                            closeBtn: 1, //右上关闭
+                            shadeClose: true, //点击遮罩关闭
+                            resize: false, //是否允许拉伸
+                            move: false,  //禁止拖拽
+                            title: "冻结设置",
+                            content: 'freezeRoleForm.html'
+                        });
+                        break;//freeze
+                }//switch
+            });//end 监听行工具事件
+
+            //监听头工具栏事件
+            table.on('toolbar(freezeRoleInfoTable)', function (obj) {
+                let checkStatus = table.checkStatus(obj.config.id)
+                    , data = checkStatus.data; //获取选中的数据
+
+                switch (obj.event) {
+                    case 'getCheckLength':
+                        layer.msg('选中了：' + data.length + ' 个');
+                        break;//getCheckLength
+                    case 'flush':
+                        table.reload('freezeRoleInfoTable', {
+                            page: {
+                                curr: 1 //获取起始页，重新从第 1 页开始
+                            }
+                        }); //end table.reload
+                        break;//flush
+                }//end switch(obj.event)
+
+            });//end 头工具栏事件
+
+        });//end 冻结管理
+
         //头像管理
         $("#roleHeadPortraits").on("click", function () {
             $(this).addClass("layui-this").siblings().removeClass("layui-this");//选中高亮
-        });
+
+            //页面内容替换并填充
+            const CONTENT_BODY_DIV = $("#contentBody");
+            CONTENT_BODY_DIV.empty();
+            CONTENT_BODY_DIV.html(`
+                <!-- 面包屑 -->
+                <div id="breadcrumb">
+                    <span class="layui-breadcrumb">
+                        <a href="#">用户信息</a>
+                        <a href="#">账号信息</a>
+                        <a><cite>头像管理</cite></a>
+                    </span>
+                </div>
+                <div>
+                </div>
+            `);
+
+            element.render('breadcrumb');//重新进行对面包屑的渲染
+
+        });//end 头像管理
 
     });//end layui
 });//end require

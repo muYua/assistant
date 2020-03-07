@@ -113,16 +113,16 @@ public class VerifyTokenInterceptor implements HandlerInterceptor {
     		}else {
 				//判断账号是否激活
 				String id = claims.getSubject();
-				Optional<Role> result = roleDao.findById(Integer.parseInt(id));
+				Optional<Role> result = roleDao.findById(Long.parseLong(id));
 				if(!result.isPresent()){
 					log.error("【VerifyTokenInterceptor】Token验证异常，账号已不存在。");
 					return false;
 				}
 				Role role = result.get();
-				Integer activated = role.getActivated();
-				if(activated != 1)
+				Boolean activated = role.getActivated();
+				if(!activated)
 				{
-					log.error("【VerifyTokenInterceptor】Token验证异常，账号未激活或被封。");
+					log.error("【VerifyTokenInterceptor】Token验证异常，账号未激活。");
 					return false;
 				}
 

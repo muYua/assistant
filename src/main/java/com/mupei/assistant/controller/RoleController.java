@@ -26,8 +26,6 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    // @Resource，按名字注入Bean组件：RedisTemplate<String, Object>，
-    // @Atuowired，按类型只能注入RedisTemplate、RedisTemplate<String,String>或StringRedisTemplate
     @Autowired
     private EmailUtil emailUtil;
     @Autowired
@@ -88,7 +86,7 @@ public class RoleController {
 
             if (!StringUtils.isEmpty(loginRole)) {
                 //判断账号是否激活
-                if (loginRole.getActivated() != 1) {
+                if (!loginRole.getActivated()) {
                     log.error("【/login】登录失败，账号未激活。");
 
                     json.setSuccess(false);
@@ -202,7 +200,10 @@ public class RoleController {
 
             role.setRegTime(regTime);
             role.setIp(ipAddr);
-            role.setActivated(0); //设置激活状态-未激活
+//            role.setActivated(true); //设置激活状态-未激活
+//            role.setFreezeSeconds(0L); //设置冻结时间
+//            role.setImage("/images/head-portraits/admin.jpg"); //默认头像
+//            role.setSex("男");
 
             String email = role.getEmail();
 
@@ -277,7 +278,7 @@ public class RoleController {
         Role role = roleService.findByEmail(email);
         if (!StringUtils.isEmpty(role)) {
             //判断账号是否激活
-            if (role.getActivated() != 1) {
+            if (!role.getActivated()) {
                 log.error("【/getActivateResetCode】操作失败，账号未激活。");
 
                 json.setSuccess(false);
@@ -471,7 +472,7 @@ public class RoleController {
             return  json;
         }
 
-        Integer id = Integer.valueOf(stringId);
+        Long id = Long.valueOf(stringId); //Long id = Long.parseLong(stringId);
 
         Boolean isLogout = roleService.logout(id, time);
 

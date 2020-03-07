@@ -19,22 +19,22 @@ import lombok.ToString;
 @Table(name = "tb_teacher")
 public class Teacher extends Role {
 	// 教工号
-	@Column(name = "t_work_number")
+	@Column(name = "t_work_number", length = 16)
 	private String workNumber;
 	// 学历
-	@Column(name = "t_education")
+	@Column(name = "t_education", length = 25)
 	private String education;
 	// 学位
-	@Column(name = "t_degree")
+	@Column(name = "t_degree", length = 25)
 	private String degree;
 	// 职称
-	@Column(name = "t_title")
+	@Column(name = "t_title", length = 25)
 	private String title;
 	// 毕业学校
-	@Column(name = "t_School")
+	@Column(name = "t_School", length = 55)
 	private String tSchool;
 	// 毕业专业
-	@Column(name = "t_Major")
+	@Column(name = "t_Major", length = 20)
 	private String tMajor;
 
 }

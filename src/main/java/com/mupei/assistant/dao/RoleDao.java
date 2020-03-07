@@ -21,7 +21,7 @@ import io.lettuce.core.dynamic.annotation.Param;
  * @ @Query("...#{page.pageSize}...") public Object findByPage(Page page); //取封装对象属性
  */
  
-public interface RoleDao extends CrudRepository<Role, Integer> {
+public interface RoleDao extends CrudRepository<Role, Long> {
 	
 	@Query(value = "FROM #{#entityName} r WHERE r.email = ?1 AND r.password = ?2", nativeQuery = false)
 	public Role findByEmailAndPassword(String idNumber, String password);

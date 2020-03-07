@@ -54,8 +54,8 @@ public class RoleServiceImpl implements RoleService {
         if (!StringUtils.isEmpty(role)) {
             Role findByEmail = roleDao.findByEmail(role.getEmail());
             if (findByEmail != null) {//Email注册在库
-                Integer activated = findByEmail.getActivated();
-                if (activated.equals(1))
+                Boolean activated = findByEmail.getActivated();
+                if (activated)//已经激活
                     return false;
                 role.setId(findByEmail.getId());
             }
@@ -76,7 +76,7 @@ public class RoleServiceImpl implements RoleService {
         if(StringUtils.isEmpty(role))
             return false;
 
-        role.setActivated(1);
+        role.setActivated(true);
         roleDao.save(role);
         return true;
     }
@@ -127,20 +127,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findById(Integer id) {
+    public Role findById(Long id) {
         if(StringUtils.isEmpty(id))
             return null;
         Optional<Role> optionalRole = roleDao.findById(id);
-        if(!optionalRole.isPresent())
-            return null;
-        else
-            return  optionalRole.get();
+        return optionalRole.orElse(null);//roleOptional.isPresent() ? role.get() : null;
     }
 
     @Override
     @Transactional
-    public Boolean logout(Integer id, String time) {
+    public Boolean logout(Long id, String time) {
         Optional<Role> optionalRole = roleDao.findById(id);
+
         if(!optionalRole.isPresent())
             return false;
         Role role = optionalRole.get();

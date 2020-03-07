@@ -7,7 +7,6 @@ public interface RoleService {
 	public Role login(String idNumber, Role role, Integer flag);
 	
 	public Boolean reg(Role role);
-
 	//激活账号
 	public Boolean activateEmail(String email);
 
@@ -19,7 +18,7 @@ public interface RoleService {
 
 	public Role findByEmail(String email);
 
-    public Role findById(Integer id);
+    public Role findById(Long id);
 
-	public Boolean logout(Integer id, String time);
+	public Boolean logout(Long id, String time);
 }
